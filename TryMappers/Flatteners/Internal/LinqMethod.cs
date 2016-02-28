@@ -30,7 +30,7 @@ namespace TryMappers.Flatteners.Internal
         }
 
         /// <summary>
-        /// Method name for debug
+        /// Method name for debug (rest not implmented yet)
         /// </summary>
         public string MethodName { get; private set; }
 
