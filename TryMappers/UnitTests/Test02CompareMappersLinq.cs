@@ -65,16 +65,13 @@ namespace TryMappers.UnitTests
             var queryData = FatherSon.CreateMany(numTimes).AsQueryable();
             using (new TimerToConsole($"automapper-map: GenerationFlattenDto - for {numTimes}."))
             {
-                for (int i = 0; i < numTimes; i++)
-                {
-                    //ATTEMPT
-                    var list = queryData.ProjectTo<GenerationFlattenDto>(config);
+                //ATTEMPT
+                var list = queryData.ProjectTo<GenerationFlattenDto>(config);
 
-                    //VERIFY
-                    list.First().MyString.ShouldEqual("Father");
-                    list.First().SonMyString.ShouldEqual("Son");
-                    list.First().SonGrandsonMyString.ShouldEqual("Grandson");
-                }
+                //VERIFY
+                list.First().MyString.ShouldEqual("Father");
+                list.First().SonMyString.ShouldEqual("Son");
+                list.First().SonGrandsonMyString.ShouldEqual("Grandson");
             }
         }
 
@@ -99,14 +96,11 @@ namespace TryMappers.UnitTests
             var queryData = SimpleClass.CreateMany(numTimes).AsQueryable();
             using (new TimerToConsole($"ExpressMapper-map: SimpleClass - for {numTimes}"))
             {
-                for (int i = 0; i < numTimes; i++)
-                {
-                    //ATTEMPT
-                    var list = queryData.Project<SimpleClass, SimpleClassDto>();
+                //ATTEMPT
+                var list = queryData.Project<SimpleClass, SimpleClassDto>();
 
-                    //VERIFY   
-                    list.First().MyDateTime.Year.ShouldEqual(2016);                
-                }
+                //VERIFY   
+                list.First().MyDateTime.Year.ShouldEqual(2016);
             }
         }
 
@@ -132,16 +126,13 @@ namespace TryMappers.UnitTests
             var queryData = FatherSon.CreateMany(numTimes).AsQueryable();
             using (new TimerToConsole($"ExpressMapper-map: GenerationFlattenDto - for {numTimes}"))
             {
-                for (int i = 0; i < numTimes; i++)
-                {
-                    //ATTEMPT
-                    var list = queryData.Project<FatherSon, GenerationFlattenDto>();
+                //ATTEMPT
+                var list = queryData.Project<FatherSon, GenerationFlattenDto>();
 
-                    //VERIFY   
-                    list.First().MyString.ShouldEqual("Father");
-                    list.First().SonMyString.ShouldEqual("Son");
-                    list.First().SonGrandsonMyString.ShouldEqual("Grandson");
-                }
+                //VERIFY   
+                list.First().MyString.ShouldEqual("Father");
+                list.First().SonMyString.ShouldEqual("Son");
+                list.First().SonGrandsonMyString.ShouldEqual("Grandson");
             }
         }
     }
