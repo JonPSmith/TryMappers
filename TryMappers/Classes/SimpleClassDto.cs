@@ -1,7 +1,7 @@
 ﻿#region licence
 // ======================================================================================
-// Mvc5UsingBower - An example+library to allow an MVC project to use Bower and Grunt
-// Filename: SimpleClass.cs
+// TryMappers - compare AutoMapper and ExpressMapper for LINQ and develop flattener for ExpressMapper
+// Filename: SimpleClassDto.cs
 // Date Created: 2016/02/25
 // 
 // Under the MIT License (MIT)
@@ -19,7 +19,5 @@ namespace TryMappers.Classes
         public int MyInt { get; set; }
         public string MyString { get; set; }
         public DateTime MyDateTime { get; set; }
-
-
     }
 }

@@ -1,19 +1,7 @@
-﻿#region licence
-// ======================================================================================
-// Mvc5UsingBower - An example+library to allow an MVC project to use Bower and Grunt
-// Filename: TestFileHelpers.cs
-// Date Created: 2016/02/17
-// 
-// Under the MIT License (MIT)
-// 
-// Written by Jon Smith : GitHub JonPSmith, www.thereformedprogrammer.net
-// ======================================================================================
-#endregion
-
-using System;
+﻿using System;
 using System.IO;
 
-namespace Tests.Helpers
+namespace TryMappers.Helpers
 {
     internal static class TestFileHelpers
     {

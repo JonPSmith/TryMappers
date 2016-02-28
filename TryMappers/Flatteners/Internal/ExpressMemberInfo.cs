@@ -1,6 +1,6 @@
 ﻿#region licence
 // ======================================================================================
-// Mvc5UsingBower - An example+library to allow an MVC project to use Bower and Grunt
+// TryMappers - compare AutoMapper and ExpressMapper for LINQ and develop flattener for ExpressMapper
 // Filename: ExpressMemberInfo.cs
 // Date Created: 2016/02/27
 // 
@@ -19,6 +19,17 @@ namespace TryMappers.Flatteners
 {
     internal class ExpressMemberInfo
     {
+        public ExpressMemberInfo(PropertyInfo destMember, PropertyInfo[] sourcePathMembers, PropertyInfo lastMemberToAdd, 
+            LinqMethod linqMethodSuffix  = null)
+        {
+            DestMember = destMember;
+            LinqMethodSuffix = linqMethodSuffix;
+
+            var list = sourcePathMembers.ToList();
+            list.Add(lastMemberToAdd);
+            SourcePathMembers = list;
+        }
+
         /// <summary>
         /// The Destination property in the DTO
         /// </summary>
@@ -32,24 +43,12 @@ namespace TryMappers.Flatteners
         /// <summary>
         /// Optional Linq Method to apply to an enumerable source
         /// </summary>
-        public LinqMethod LinqMethodEnding { get; private set; }
-
-
-        public ExpressMemberInfo(PropertyInfo destMember, PropertyInfo[] sourcePathMembers, PropertyInfo lastMemberToAdd, 
-            LinqMethod linqMethodEnding  = null)
-        {
-            DestMember = destMember;
-            LinqMethodEnding = linqMethodEnding;
-
-            var list = sourcePathMembers.ToList();
-            list.Add(lastMemberToAdd);
-            SourcePathMembers = list;
-        }
+        public LinqMethod LinqMethodSuffix { get; private set; }
 
         public override string ToString()
         {
-            var enumMethod = LinqMethodEnding == null ? "" : $".{LinqMethodEnding}()";
-            return $"DestMember: {DestMember.Name}, Source: {string.Join(".",SourcePathMembers.Select(x => x.Name))}{enumMethod}";
+            var linqMethodStr = LinqMethodSuffix == null ? "" : $".{LinqMethodSuffix}()";
+            return $"dest => dest.{DestMember.Name}, src => src.{string.Join(".",SourcePathMembers.Select(x => x.Name))}{linqMethodStr}";
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿#region licence
 // ======================================================================================
-// Mvc5UsingBower - An example+library to allow an MVC project to use Bower and Grunt
-// Filename: ChildClass.cs
+// TryMappers - compare AutoMapper and ExpressMapper for LINQ and develop flattener for ExpressMapper
+// Filename: Grandson.cs
 // Date Created: 2016/02/26
 // 
 // Under the MIT License (MIT)
@@ -9,25 +9,19 @@
 // Written by Jon Smith : GitHub JonPSmith, www.thereformedprogrammer.net
 // ======================================================================================
 #endregion
-
-using System;
-
 namespace TryMappers.Classes
 {
-    public class SonClass
+    public class Grandson
     {
         public int MyInt { get; set; }
         public string MyString { get; set; }
 
-        public GrandsonClass Grandson { get; set; }
-
-        public static SonClass CreateOne()
+        public static Grandson CreateOne()
         {
-            return new SonClass
+            return new Grandson
             {
-                MyInt = 2,
-                MyString = "Son",
-                Grandson = GrandsonClass.CreateOne()
+                MyInt = 3,
+                MyString = "Grandson"
             };
         }
     }

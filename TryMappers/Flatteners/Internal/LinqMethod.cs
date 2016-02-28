@@ -1,6 +1,6 @@
 ﻿#region licence
 // ======================================================================================
-// Mvc5UsingBower - An example+library to allow an MVC project to use Bower and Grunt
+// TryMappers - compare AutoMapper and ExpressMapper for LINQ and develop flattener for ExpressMapper
 // Filename: LinqMethod.cs
 // Date Created: 2016/02/27
 // 
@@ -10,17 +10,18 @@
 // ======================================================================================
 #endregion
 
-using System.Linq;
+using System.Collections.Generic;
 using System.Reflection;
-using System.Runtime.InteropServices;
 
 namespace TryMappers.Flatteners.Internal
 {
     internal class LinqMethod
     {
-        private static readonly string[] MethodNames = new[] {"Count", "Sum"};
-
-        public string MethodName { get; private set; }
+        private static readonly Dictionary<string, LinqMethod> MethodLookup = new Dictionary<string, LinqMethod> 
+        {
+            { "Count", new LinqMethod("Count") },
+            { "Sum", new LinqMethod("Sum") },
+        };
 
 
         private LinqMethod(string methodName)
@@ -28,12 +29,15 @@ namespace TryMappers.Flatteners.Internal
             MethodName = methodName;
         }
 
+        /// <summary>
+        /// Method name for debug
+        /// </summary>
+        public string MethodName { get; private set; }
+
         public static LinqMethod MatchsWithLinqMethod(PropertyInfo destProp, string matchStart)
         {
             var endOfName = destProp.Name.Substring(matchStart.Length);
-            return MethodNames.Contains(endOfName) ? new LinqMethod(endOfName) : null;
+            return MethodLookup.ContainsKey(endOfName) ? MethodLookup[endOfName] : null;
         }
-
-
     }
 }

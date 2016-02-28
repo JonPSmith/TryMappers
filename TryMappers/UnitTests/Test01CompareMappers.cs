@@ -1,6 +1,6 @@
 ﻿#region licence
 // ======================================================================================
-// Mvc5UsingBower - An example+library to allow an MVC project to use Bower and Grunt
+// TryMappers - compare AutoMapper and ExpressMapper for LINQ and develop flattener for ExpressMapper
 // Filename: Test01CompareMappers.cs
 // Date Created: 2016/02/25
 // 
@@ -10,17 +10,14 @@
 // ======================================================================================
 #endregion
 
-using System.Diagnostics;
-using System.Linq;
 using NUnit.Framework;
-using Tests.Helpers;
 using TryMappers.Classes;
+using TryMappers.Helpers;
 
 namespace TryMappers.UnitTests
 {
     public class Test01CompareMappers
     {
-
         [TestCase(1, 1)]
         [TestCase(1, 2)]
         [TestCase(100, 3)]
@@ -57,7 +54,7 @@ namespace TryMappers.UnitTests
             AutoMapper.MapperConfiguration config;
             using (new TimerToConsole($"automapper-setup: GenerationFlattenDto - {count} time"))
             {
-                config = new AutoMapper.MapperConfiguration(cfg => cfg.CreateMap<FatherClass, GenerationFlattenDto>());
+                config = new AutoMapper.MapperConfiguration(cfg => cfg.CreateMap<FatherSon, GenerationFlattenDto>());
             }
             using (new TimerToConsole($"automapper-map: GenerationFlattenDto - for {numTimes}."))
             {
@@ -65,7 +62,7 @@ namespace TryMappers.UnitTests
                 {
                     //ATTEMPT
                     var mapper = config.CreateMapper();
-                    var dto = mapper.Map<GenerationFlattenDto>(FatherClass.CreateOne());
+                    var dto = mapper.Map<GenerationFlattenDto>(FatherSon.CreateOne());
 
                     //VERIFY
                     dto.MyString.ShouldEqual("Father");
@@ -118,7 +115,7 @@ namespace TryMappers.UnitTests
             {
                 using (new TimerToConsole("ExpressMapper-setup: GenerationFlattenDto"))
                 {
-                    ExpressMapper.Mapper.Register<FatherClass, GenerationFlattenDto>()
+                    ExpressMapper.Mapper.Register<FatherSon, GenerationFlattenDto>()
                         .Member(dest => dest.SonMyInt, src => src.Son.MyInt)
                         .Member(dest => dest.SonGrandsonMyInt, src => src.Son.Grandson.MyInt)
                         .Member(dest => dest.SonMyString, src => src.Son.MyString)
@@ -132,7 +129,7 @@ namespace TryMappers.UnitTests
                 {
                     //ATTEMPT
                     var dto = new GenerationFlattenDto();
-                    ExpressMapper.Mapper.Map(FatherClass.CreateOne(), dto);
+                    ExpressMapper.Mapper.Map(FatherSon.CreateOne(), dto);
 
                     //VERIFY   
                     dto.MyString.ShouldEqual("Father");
@@ -141,6 +138,5 @@ namespace TryMappers.UnitTests
                 }
             }
         }
-
     }
 }

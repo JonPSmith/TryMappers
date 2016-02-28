@@ -1,4 +1,16 @@
-﻿using System;
+﻿#region licence
+// ======================================================================================
+// TryMappers - compare AutoMapper and ExpressMapper for LINQ and develop flattener for ExpressMapper
+// Filename: FlattenMapper.cs
+// Date Created: 2016/02/26
+// 
+// Under the MIT License (MIT)
+// 
+// Written by Jon Smith : GitHub JonPSmith, www.thereformedprogrammer.net
+// ======================================================================================
+#endregion
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -15,8 +27,6 @@ namespace TryMappers.Flatteners
 
         private readonly List<ExpressMemberInfo> _foundFlattens = new List<ExpressMemberInfo>();
 
-        internal IReadOnlyCollection<ExpressMemberInfo> FoundFlattens => _foundFlattens.AsReadOnly();
-
         public FlattenMapper()
         {
             _allDestProps = GetPropertiesRightAccess<TDest>();
@@ -24,6 +34,8 @@ namespace TryMappers.Flatteners
             //ExpressMapper with match the top level properties, so we ignore those
             _filteredDestProps = FilterOutExactMatches(_allDestProps, _allSourceProps);
         }
+
+        internal IReadOnlyCollection<ExpressMemberInfo> FoundFlattens => _foundFlattens.AsReadOnly();
 
         public void Register()
         {

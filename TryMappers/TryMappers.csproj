@@ -53,10 +53,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\FatherSons.cs" />
     <Compile Include="Classes\GenerationFlattenDto.cs" />
-    <Compile Include="Classes\GrandsonClass.cs" />
-    <Compile Include="Classes\SonClass.cs" />
-    <Compile Include="Classes\FatherClass.cs" />
+    <Compile Include="Classes\Grandson.cs" />
+    <Compile Include="Classes\SonGrandson.cs" />
+    <Compile Include="Classes\FatherSon.cs" />
     <Compile Include="Classes\SimpleClassDto.cs" />
     <Compile Include="Classes\SimpleClass.cs" />
     <Compile Include="Flatteners\FlattenMapper.cs" />

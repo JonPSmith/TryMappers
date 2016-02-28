@@ -1,8 +1,8 @@
 ﻿#region licence
 // ======================================================================================
-// Mvc5UsingBower - An example+library to allow an MVC project to use Bower and Grunt
-// Filename: SimpleClass.cs
-// Date Created: 2016/02/25
+// TryMappers - compare AutoMapper and ExpressMapper for LINQ and develop flattener for ExpressMapper
+// Filename: FatherSons.cs
+// Date Created: 2016/02/28
 // 
 // Under the MIT License (MIT)
 // 
@@ -10,29 +10,29 @@
 // ======================================================================================
 #endregion
 
-using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TryMappers.Classes
 {
-    public class FatherClass
+    public class FatherSons
     {
         public int MyInt { get; set; }
         public string MyString { get; set; }
 
-        public SonClass Son { get; set; }
+        public ICollection<SonGrandson> Sons { get; set; }
 
-        public static FatherClass CreateOne()
+        public static FatherSons CreateOne()
         {
-            return new FatherClass
+            return new FatherSons
             {
                 MyInt = 1,
                 MyString = "Father",
-                Son = SonClass.CreateOne()
+                Sons = SonGrandson.CreateMany().ToList()
             };
         }
 
-        public static IEnumerable<FatherClass> CreateMany(int num = 5)
+        public static IEnumerable<FatherSons> CreateMany(int num = 5)
         {
             for (int i = 0; i < num; i++)
             {

@@ -1,8 +1,8 @@
 ﻿#region licence
 // ======================================================================================
-// Mvc5UsingBower - An example+library to allow an MVC project to use Bower and Grunt
+// TryMappers - compare AutoMapper and ExpressMapper for LINQ and develop flattener for ExpressMapper
 // Filename: TimerToConsole.cs
-// Date Created: 2016/02/17
+// Date Created: 2016/02/25
 // 
 // Under the MIT License (MIT)
 // 
@@ -13,7 +13,7 @@
 using System;
 using System.Diagnostics;
 
-namespace Tests.Helpers
+namespace TryMappers.Helpers
 {
     class TimerToConsole : IDisposable
     {

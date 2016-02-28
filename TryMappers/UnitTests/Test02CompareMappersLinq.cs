@@ -1,8 +1,8 @@
 ﻿#region licence
 // ======================================================================================
-// Mvc5UsingBower - An example+library to allow an MVC project to use Bower and Grunt
-// Filename: Test01CompareMappers.cs
-// Date Created: 2016/02/25
+// TryMappers - compare AutoMapper and ExpressMapper for LINQ and develop flattener for ExpressMapper
+// Filename: Test02CompareMappersLinq.cs
+// Date Created: 2016/02/28
 // 
 // Under the MIT License (MIT)
 // 
@@ -10,18 +10,22 @@
 // ======================================================================================
 #endregion
 
-using System.Diagnostics;
 using System.Linq;
 using AutoMapper.QueryableExtensions;
 using ExpressMapper.Extensions;
 using NUnit.Framework;
-using Tests.Helpers;
 using TryMappers.Classes;
+using TryMappers.Helpers;
 
 namespace TryMappers.UnitTests
 {
     public class Test02CompareMappersLinq
     {
+        [TestFixtureSetUp]
+        public void FixtureSetup()
+        {
+            ExpressMapper.Mapper.Reset();
+        }
 
         [TestCase(1, 1)]
         [TestCase(1, 2)]
@@ -35,10 +39,11 @@ namespace TryMappers.UnitTests
             {
                 config = new AutoMapper.MapperConfiguration(cfg => cfg.CreateMap<SimpleClass, SimpleClassDto>());
             }
+            var queryData = SimpleClass.CreateMany(numTimes).AsQueryable();
             using (new TimerToConsole($"automapper-map: SimpleClass - for {numTimes}."))
             {
                 //ATTEMPT
-                var list = SimpleClass.CreateMany(numTimes).AsQueryable().ProjectTo<SimpleClassDto>(config);
+                var list = queryData.ProjectTo<SimpleClassDto>(config);
 
                 //VERIFY
                 list.First().MyDateTime.Year.ShouldEqual(2016);
@@ -55,14 +60,15 @@ namespace TryMappers.UnitTests
             AutoMapper.MapperConfiguration config;
             using (new TimerToConsole($"automapper-setup: GenerationFlattenDto - {count} time"))
             {
-                config = new AutoMapper.MapperConfiguration(cfg => cfg.CreateMap<FatherClass, GenerationFlattenDto>());
+                config = new AutoMapper.MapperConfiguration(cfg => cfg.CreateMap<FatherSon, GenerationFlattenDto>());
             }
+            var queryData = FatherSon.CreateMany(numTimes).AsQueryable();
             using (new TimerToConsole($"automapper-map: GenerationFlattenDto - for {numTimes}."))
             {
                 for (int i = 0; i < numTimes; i++)
                 {
                     //ATTEMPT
-                    var list = FatherClass.CreateMany(numTimes).AsQueryable().ProjectTo<GenerationFlattenDto>(config);
+                    var list = queryData.ProjectTo<GenerationFlattenDto>(config);
 
                     //VERIFY
                     list.First().MyString.ShouldEqual("Father");
@@ -90,12 +96,13 @@ namespace TryMappers.UnitTests
                     ExpressMapper.Mapper.Compile();
                 }
             }
+            var queryData = SimpleClass.CreateMany(numTimes).AsQueryable();
             using (new TimerToConsole($"ExpressMapper-map: SimpleClass - for {numTimes}"))
             {
                 for (int i = 0; i < numTimes; i++)
                 {
                     //ATTEMPT
-                    var list = SimpleClass.CreateMany(numTimes).AsQueryable().Project<SimpleClass, SimpleClassDto>();
+                    var list = queryData.Project<SimpleClass, SimpleClassDto>();
 
                     //VERIFY   
                     list.First().MyDateTime.Year.ShouldEqual(2016);                
@@ -114,7 +121,7 @@ namespace TryMappers.UnitTests
             {
                 using (new TimerToConsole("ExpressMapper-setup: GenerationFlattenDto"))
                 {
-                    ExpressMapper.Mapper.Register<FatherClass, GenerationFlattenDto>()
+                    ExpressMapper.Mapper.Register<FatherSon, GenerationFlattenDto>()
                         .Member(dest => dest.SonMyInt, src => src.Son.MyInt)
                         .Member(dest => dest.SonGrandsonMyInt, src => src.Son.Grandson.MyInt)
                         .Member(dest => dest.SonMyString, src => src.Son.MyString)
@@ -122,12 +129,13 @@ namespace TryMappers.UnitTests
                     ExpressMapper.Mapper.Compile();
                 }
             }
+            var queryData = FatherSon.CreateMany(numTimes).AsQueryable();
             using (new TimerToConsole($"ExpressMapper-map: GenerationFlattenDto - for {numTimes}"))
             {
                 for (int i = 0; i < numTimes; i++)
                 {
                     //ATTEMPT
-                    var list = FatherClass.CreateMany(numTimes).AsQueryable().Project<FatherClass, GenerationFlattenDto>();
+                    var list = queryData.Project<FatherSon, GenerationFlattenDto>();
 
                     //VERIFY   
                     list.First().MyString.ShouldEqual("Father");
@@ -136,6 +144,5 @@ namespace TryMappers.UnitTests
                 }
             }
         }
-
     }
 }

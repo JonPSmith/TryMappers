@@ -1,5 +1,16 @@
-﻿using System.Reflection;
-using System.Runtime.CompilerServices;
+﻿#region licence
+// ======================================================================================
+// TryMappers - compare AutoMapper and ExpressMapper for LINQ and develop flattener for ExpressMapper
+// Filename: AssemblyInfo.cs
+// Date Created: 2016/02/25
+// 
+// Under the MIT License (MIT)
+// 
+// Written by Jon Smith : GitHub JonPSmith, www.thereformedprogrammer.net
+// ======================================================================================
+#endregion
+
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
