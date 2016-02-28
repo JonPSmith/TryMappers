@@ -43,7 +43,7 @@ namespace TryMappers.UnitTests
             using (new TimerToConsole($"automapper-map: SimpleClass - for {numTimes}."))
             {
                 //ATTEMPT
-                var list = queryData.ProjectTo<SimpleClassDto>(config);
+                var list = queryData.ProjectTo<SimpleClassDto>(config).ToList();        //force IQueryable to be executed
 
                 //VERIFY
                 list.First().MyDateTime.Year.ShouldEqual(2016);
@@ -66,7 +66,7 @@ namespace TryMappers.UnitTests
             using (new TimerToConsole($"automapper-map: GenerationFlattenDto - for {numTimes}."))
             {
                 //ATTEMPT
-                var list = queryData.ProjectTo<GenerationFlattenDto>(config);
+                var list = queryData.ProjectTo<GenerationFlattenDto>(config).ToList();        //force IQueryable to be executed
 
                 //VERIFY
                 list.First().MyString.ShouldEqual("Father");
@@ -85,19 +85,18 @@ namespace TryMappers.UnitTests
         public void Test10ExpressMapperSimpleClassOk(int numTimes, int count)
         {
             //SETUP
-            if (count == 1)
+            ExpressMapper.Mapper.Reset();
+            using (new TimerToConsole("ExpressMapper-setup: SimpleClass"))
             {
-                using (new TimerToConsole("ExpressMapper-setup: SimpleClass"))
-                {
-                    ExpressMapper.Mapper.Register<SimpleClass, SimpleClassDto>();
-                    ExpressMapper.Mapper.Compile();
-                }
+                ExpressMapper.Mapper.Register<SimpleClass, SimpleClassDto>();
+                ExpressMapper.Mapper.Compile();
             }
+
             var queryData = SimpleClass.CreateMany(numTimes).AsQueryable();
             using (new TimerToConsole($"ExpressMapper-map: SimpleClass - for {numTimes}"))
             {
                 //ATTEMPT
-                var list = queryData.Project<SimpleClass, SimpleClassDto>();
+                var list = queryData.Project<SimpleClass, SimpleClassDto>().ToList(); //force IQueryable to be executed
 
                 //VERIFY   
                 list.First().MyDateTime.Year.ShouldEqual(2016);
@@ -111,23 +110,23 @@ namespace TryMappers.UnitTests
         public void Test11ExpressMapperGenerationFlattenDtoOk(int numTimes, int count)
         {
             //SETUP
-            if (count == 1)
+            ExpressMapper.Mapper.Reset();
+            using (new TimerToConsole("ExpressMapper-setup: GenerationFlattenDto"))
             {
-                using (new TimerToConsole("ExpressMapper-setup: GenerationFlattenDto"))
-                {
-                    ExpressMapper.Mapper.Register<FatherSon, GenerationFlattenDto>()
-                        .Member(dest => dest.SonMyInt, src => src.Son.MyInt)
-                        .Member(dest => dest.SonGrandsonMyInt, src => src.Son.Grandson.MyInt)
-                        .Member(dest => dest.SonMyString, src => src.Son.MyString)
-                        .Member(dest => dest.SonGrandsonMyString, src => src.Son.Grandson.MyString);
-                    ExpressMapper.Mapper.Compile();
-                }
+                ExpressMapper.Mapper.Register<FatherSon, GenerationFlattenDto>()
+                    .Member(dest => dest.SonMyInt, src => src.Son.MyInt)
+                    .Member(dest => dest.SonGrandsonMyInt, src => src.Son.Grandson.MyInt)
+                    .Member(dest => dest.SonMyString, src => src.Son.MyString)
+                    .Member(dest => dest.SonGrandsonMyString, src => src.Son.Grandson.MyString);
+                ExpressMapper.Mapper.Compile();
             }
+
             var queryData = FatherSon.CreateMany(numTimes).AsQueryable();
             using (new TimerToConsole($"ExpressMapper-map: GenerationFlattenDto - for {numTimes}"))
             {
                 //ATTEMPT
-                var list = queryData.Project<FatherSon, GenerationFlattenDto>();
+                var list = queryData.Project<FatherSon, GenerationFlattenDto>().ToList();
+                    //force IQueryable to be executed
 
                 //VERIFY   
                 list.First().MyString.ShouldEqual("Father");

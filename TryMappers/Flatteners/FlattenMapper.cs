@@ -88,7 +88,7 @@ namespace TryMappers.Flatteners
                 }
                 else if (destProp.PropertyType != typeof (string))
                 {
-                    //its an enumerable class so see if it matches a an enumrable method
+                    //its an enumerable class so see if the end relates to a LINQ method
 
                     var enumeableMethod = LinqMethod.MatchsWithLinqMethod(destProp, matchStart);
                     if (enumeableMethod != null)

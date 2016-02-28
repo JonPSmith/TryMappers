@@ -10,6 +10,7 @@
 // ======================================================================================
 #endregion
 
+using System;
 using System.Collections.Generic;
 
 namespace TryMappers.Classes
@@ -21,21 +22,23 @@ namespace TryMappers.Classes
 
         public Grandson Grandson { get; set; }
 
-        public static SonGrandson CreateOne()
+        public static SonGrandson CreateOne(Random rand = null)
         {
+            rand = rand ?? new Random();
             return new SonGrandson
             {
-                MyInt = 2,
+                MyInt = rand.Next(),
                 MyString = "Son",
-                Grandson = Grandson.CreateOne()
+                Grandson = Grandson.CreateOne(rand)
             };
         }
 
-        public static IEnumerable<SonGrandson> CreateMany(int num = 5)
+        public static IEnumerable<SonGrandson> CreateMany(int num = 5, Random rand = null)
         {
+            rand = rand ?? new Random();
             for (int i = 0; i < num; i++)
             {
-                yield return CreateOne();
+                yield return CreateOne(rand);
             }
         }
     }

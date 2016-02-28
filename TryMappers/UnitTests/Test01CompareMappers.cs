@@ -82,13 +82,11 @@ namespace TryMappers.UnitTests
         public void Test10ExpressMapperSimpleClassOk(int numTimes, int count)
         {
             //SETUP
-            if (count == 1)
+            ExpressMapper.Mapper.Reset();
+            using (new TimerToConsole("ExpressMapper-setup: SimpleClass"))
             {
-                using (new TimerToConsole("ExpressMapper-setup: SimpleClass"))
-                {
-                    ExpressMapper.Mapper.Register<SimpleClass, SimpleClassDto>();
-                    ExpressMapper.Mapper.Compile();
-                }
+                ExpressMapper.Mapper.Register<SimpleClass, SimpleClassDto>();
+                ExpressMapper.Mapper.Compile();
             }
             using (new TimerToConsole($"ExpressMapper-map: SimpleClass - for {numTimes}"))
             {
@@ -99,7 +97,7 @@ namespace TryMappers.UnitTests
                     ExpressMapper.Mapper.Map(SimpleClass.CreateOne(), dto);
 
                     //VERIFY   
-                    dto.MyDateTime.Year.ShouldEqual(2016);                
+                    dto.MyDateTime.Year.ShouldEqual(2016);
                 }
             }
         }
@@ -111,17 +109,15 @@ namespace TryMappers.UnitTests
         public void Test11ExpressMapperGenerationFlattenDtoOk(int numTimes, int count)
         {
             //SETUP
-            if (count == 1)
+            ExpressMapper.Mapper.Reset();
+            using (new TimerToConsole("ExpressMapper-setup: GenerationFlattenDto"))
             {
-                using (new TimerToConsole("ExpressMapper-setup: GenerationFlattenDto"))
-                {
-                    ExpressMapper.Mapper.Register<FatherSon, GenerationFlattenDto>()
-                        .Member(dest => dest.SonMyInt, src => src.Son.MyInt)
-                        .Member(dest => dest.SonGrandsonMyInt, src => src.Son.Grandson.MyInt)
-                        .Member(dest => dest.SonMyString, src => src.Son.MyString)
-                        .Member(dest => dest.SonGrandsonMyString, src => src.Son.Grandson.MyString);
-                    ExpressMapper.Mapper.Compile();
-                }
+                ExpressMapper.Mapper.Register<FatherSon, GenerationFlattenDto>()
+                    .Member(dest => dest.SonMyInt, src => src.Son.MyInt)
+                    .Member(dest => dest.SonGrandsonMyInt, src => src.Son.Grandson.MyInt)
+                    .Member(dest => dest.SonMyString, src => src.Son.MyString)
+                    .Member(dest => dest.SonGrandsonMyString, src => src.Son.Grandson.MyString);
+                ExpressMapper.Mapper.Compile();
             }
             using (new TimerToConsole($"ExpressMapper-map: GenerationFlattenDto - for {numTimes}"))
             {
