@@ -21,7 +21,7 @@ namespace TryMappers.UnitTests
     public class Test20FlattenMapper
     {
         [Test]
-        public void Test01FlattenFatherClassOk()
+        public void Test01FlattenFatherOk()
         {
             //SETUP
             var f = new FlattenMapper<Father, GenerationFlattenDto>();
@@ -37,6 +37,22 @@ namespace TryMappers.UnitTests
             mCode[i++].ToString().ShouldEqual("dest => dest.SonMyString, src => src.Son.MyString");
             mCode[i++].ToString().ShouldEqual("dest => dest.SonGrandsonMyInt, src => src.Son.Grandson.MyInt");
             mCode[i++].ToString().ShouldEqual("dest => dest.SonGrandsonMyString, src => src.Son.Grandson.MyString");
+        }
+
+        [Test]
+        public void Test01FlattenFatherSonsOk()
+        {
+            //SETUP
+            var f = new FlattenMapper<FatherSons, FatherSonsCountDto>();
+
+            //ATTEMPT
+            f.BuildMemberMapping();
+
+            //VERIFY
+            f.FoundFlattens.Count.ShouldEqual(1);
+            var mCode = f.FoundFlattens.ToList();
+            var i = 0;
+            mCode[i++].ToString().ShouldEqual("dest => dest.SonsCount, src => src.Sons.Count()");
         }
     }
 }

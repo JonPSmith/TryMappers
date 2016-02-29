@@ -44,5 +44,10 @@ namespace TryMappers.Flatteners.Internal
             var endOfName = destProp.Name.Substring(matchStart.Length);
             return EnumerableMethodLookup.ContainsKey(endOfName) ? EnumerableMethodLookup[endOfName] : null;
         }
+
+        public override string ToString()
+        {
+            return $".{MethodName}()";
+        }
     }
 }

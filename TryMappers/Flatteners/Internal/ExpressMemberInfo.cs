@@ -47,7 +47,7 @@ namespace TryMappers.Flatteners
 
         public override string ToString()
         {
-            var linqMethodStr = LinqMethodSuffix == null ? "" : $".{LinqMethodSuffix}()";
+            var linqMethodStr = LinqMethodSuffix == null ? "" : LinqMethodSuffix.ToString();
             return $"dest => dest.{DestMember.Name}, src => src.{string.Join(".",SourcePathMembers.Select(x => x.Name))}{linqMethodStr}";
         }
     }

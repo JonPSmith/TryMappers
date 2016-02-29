@@ -74,19 +74,15 @@ namespace TryMappers.Flatteners
                     return;
                 }
 
-                if (!matchedStartSrcProp.PropertyType.IsClass)
-                    //no expectation of going deeper or finding a Ienumerable method so skip on
-                    continue;
-
-
-                if (!typeof (IEnumerable<>).IsAssignableFrom(destProp.PropertyType))
+                if (matchedStartSrcProp.PropertyType.IsClass)
                 {
                     var classProps = GetPropertiesRightAccess(matchedStartSrcProp.PropertyType);
                     var clonedList = sourcePropPath.ToList();
                     clonedList.Add(matchedStartSrcProp);
                     ScanSourceClassRecursively(classProps, destProp, matchStart, clonedList.ToArray());
                 }
-                else if (destProp.PropertyType != typeof (string))
+                else if (matchedStartSrcProp.PropertyType.GetInterface("IEnumerable") != null
+                    && matchedStartSrcProp.PropertyType != typeof (string))
                 {
                     //its an enumerable class so see if the end relates to a LINQ method
 
