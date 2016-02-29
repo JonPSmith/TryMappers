@@ -74,6 +74,10 @@ namespace TryMappers.Flatteners
                     return;
                 }
 
+                if (matchedStartSrcProp.PropertyType == typeof (string))
+                    //string can only be directly matched
+                    continue;
+
                 if (matchedStartSrcProp.PropertyType.IsClass)
                 {
                     var classProps = GetPropertiesRightAccess(matchedStartSrcProp.PropertyType);
@@ -81,8 +85,7 @@ namespace TryMappers.Flatteners
                     clonedList.Add(matchedStartSrcProp);
                     ScanSourceClassRecursively(classProps, destProp, matchStart, clonedList.ToArray());
                 }
-                else if (matchedStartSrcProp.PropertyType.GetInterface("IEnumerable") != null
-                    && matchedStartSrcProp.PropertyType != typeof (string))
+                else if (matchedStartSrcProp.PropertyType.GetInterface("IEnumerable") != null)
                 {
                     //its an enumerable class so see if the end relates to a LINQ method
 
