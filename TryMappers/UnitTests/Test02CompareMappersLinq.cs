@@ -10,6 +10,7 @@
 // ======================================================================================
 #endregion
 
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper.QueryableExtensions;
 using ExpressMapper.Extensions;
@@ -60,9 +61,9 @@ namespace TryMappers.UnitTests
             AutoMapper.MapperConfiguration config;
             using (new TimerToConsole($"automapper-setup: GenerationFlattenDto - {count} time"))
             {
-                config = new AutoMapper.MapperConfiguration(cfg => cfg.CreateMap<FatherSon, GenerationFlattenDto>());
+                config = new AutoMapper.MapperConfiguration(cfg => cfg.CreateMap<Father, GenerationFlattenDto>());
             }
-            var queryData = FatherSon.CreateMany(numTimes).AsQueryable();
+            var queryData = Father.CreateMany(numTimes).AsQueryable();
             using (new TimerToConsole($"automapper-map: GenerationFlattenDto - for {numTimes}."))
             {
                 //ATTEMPT
@@ -72,6 +73,25 @@ namespace TryMappers.UnitTests
                 list.First().MyString.ShouldEqual("Father");
                 list.First().SonMyString.ShouldEqual("Son");
                 list.First().SonGrandsonMyString.ShouldEqual("Grandson");
+            }
+        }
+
+        [Test]
+        public void Test03AutoMapperGenerationFlattenDtoWithNullOk()
+        {
+            var config = new AutoMapper.MapperConfiguration(cfg => cfg.CreateMap<Father, GenerationFlattenDto>());
+            var single = Father.CreateOne();
+            single.Son.Grandson = null;
+            var queryData = new List<Father> {single}.AsQueryable();
+            using (new TimerToConsole($"automapper-map: GenerationFlattenDto - with null."))
+            {
+                //ATTEMPT
+                var list = queryData.ProjectTo<GenerationFlattenDto>(config).ToList();        //force IQueryable to be executed
+
+                //VERIFY
+                list.First().MyString.ShouldEqual("Father");
+                list.First().SonMyString.ShouldEqual("Son");
+                list.First().SonGrandsonMyString.ShouldEqual(null);
             }
         }
 
@@ -113,7 +133,7 @@ namespace TryMappers.UnitTests
             ExpressMapper.Mapper.Reset();
             using (new TimerToConsole("ExpressMapper-setup: GenerationFlattenDto"))
             {
-                ExpressMapper.Mapper.Register<FatherSon, GenerationFlattenDto>()
+                ExpressMapper.Mapper.Register<Father, GenerationFlattenDto>()
                     .Member(dest => dest.SonMyInt, src => src.Son.MyInt)
                     .Member(dest => dest.SonGrandsonMyInt, src => src.Son.Grandson.MyInt)
                     .Member(dest => dest.SonMyString, src => src.Son.MyString)
@@ -121,17 +141,45 @@ namespace TryMappers.UnitTests
                 ExpressMapper.Mapper.Compile();
             }
 
-            var queryData = FatherSon.CreateMany(numTimes).AsQueryable();
+            var queryData = Father.CreateMany(numTimes).AsQueryable();
             using (new TimerToConsole($"ExpressMapper-map: GenerationFlattenDto - for {numTimes}"))
             {
                 //ATTEMPT
-                var list = queryData.Project<FatherSon, GenerationFlattenDto>().ToList();
+                var list = queryData.Project<Father, GenerationFlattenDto>().ToList();
                     //force IQueryable to be executed
 
                 //VERIFY   
                 list.First().MyString.ShouldEqual("Father");
                 list.First().SonMyString.ShouldEqual("Son");
                 list.First().SonGrandsonMyString.ShouldEqual("Grandson");
+            }
+        }
+
+        [Test]
+        public void Test13ExpressMapperGenerationFlattenDtoWithNullOk()
+        {
+            ExpressMapper.Mapper.Reset();
+            using (new TimerToConsole("ExpressMapper-setup: GenerationFlattenDto"))
+            {
+                ExpressMapper.Mapper.Register<Father, GenerationFlattenDto>()
+                    .Member(dest => dest.SonMyInt, src => src.Son.MyInt)
+                    .Member(dest => dest.SonGrandsonMyInt, src => src.Son.Grandson.MyInt)
+                    .Member(dest => dest.SonMyString, src => src.Son.MyString);
+                    //.Member(dest => dest.SonGrandsonMyString, src => src.Son.Grandson.MyString);
+                ExpressMapper.Mapper.Compile();
+            }
+            var single = Father.CreateOne();
+            single.Son.Grandson = null;
+            var queryData = new List<Father> { single }.AsQueryable();
+            using (new TimerToConsole($"ExpressMapper-map: GenerationFlattenDto - with null."))
+            {
+                //ATTEMPT
+                var list = queryData.Project<Father, GenerationFlattenDto>().ToList();
+
+                //VERIFY
+                list.First().MyString.ShouldEqual("Father");
+                list.First().SonMyString.ShouldEqual("Son");
+                list.First().SonGrandsonMyString.ShouldEqual(null);
             }
         }
     }

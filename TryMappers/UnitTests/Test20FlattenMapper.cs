@@ -24,7 +24,7 @@ namespace TryMappers.UnitTests
         public void Test01FlattenFatherClassOk()
         {
             //SETUP
-            var f = new FlattenMapper<FatherSon, GenerationFlattenDto>();
+            var f = new FlattenMapper<Father, GenerationFlattenDto>();
 
             //ATTEMPT
             f.Register();

@@ -54,7 +54,7 @@ namespace TryMappers.UnitTests
             AutoMapper.MapperConfiguration config;
             using (new TimerToConsole($"automapper-setup: GenerationFlattenDto - {count} time"))
             {
-                config = new AutoMapper.MapperConfiguration(cfg => cfg.CreateMap<FatherSon, GenerationFlattenDto>());
+                config = new AutoMapper.MapperConfiguration(cfg => cfg.CreateMap<Father, GenerationFlattenDto>());
             }
             using (new TimerToConsole($"automapper-map: GenerationFlattenDto - for {numTimes}."))
             {
@@ -62,7 +62,7 @@ namespace TryMappers.UnitTests
                 {
                     //ATTEMPT
                     var mapper = config.CreateMapper();
-                    var dto = mapper.Map<GenerationFlattenDto>(FatherSon.CreateOne());
+                    var dto = mapper.Map<GenerationFlattenDto>(Father.CreateOne());
 
                     //VERIFY
                     dto.MyString.ShouldEqual("Father");
@@ -112,7 +112,7 @@ namespace TryMappers.UnitTests
             ExpressMapper.Mapper.Reset();
             using (new TimerToConsole("ExpressMapper-setup: GenerationFlattenDto"))
             {
-                ExpressMapper.Mapper.Register<FatherSon, GenerationFlattenDto>()
+                ExpressMapper.Mapper.Register<Father, GenerationFlattenDto>()
                     .Member(dest => dest.SonMyInt, src => src.Son.MyInt)
                     .Member(dest => dest.SonGrandsonMyInt, src => src.Son.Grandson.MyInt)
                     .Member(dest => dest.SonMyString, src => src.Son.MyString)
@@ -125,7 +125,7 @@ namespace TryMappers.UnitTests
                 {
                     //ATTEMPT
                     var dto = new GenerationFlattenDto();
-                    ExpressMapper.Mapper.Map(FatherSon.CreateOne(), dto);
+                    ExpressMapper.Mapper.Map(Father.CreateOne(), dto);
 
                     //VERIFY   
                     dto.MyString.ShouldEqual("Father");

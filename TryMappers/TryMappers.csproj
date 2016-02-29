@@ -34,6 +34,14 @@
       <HintPath>..\packages\AutoMapper.4.2.1\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="ExpressMapper, Version=1.8.0.0, Culture=neutral, PublicKeyToken=ac363faa09311ba0, processorArchitecture=MSIL">
       <HintPath>..\packages\Expressmapper.1.8.0\lib\net451\ExpressMapper.dll</HintPath>
       <Private>True</Private>
@@ -57,10 +65,12 @@
     <Compile Include="Classes\FatherSonsCountDto.cs" />
     <Compile Include="Classes\GenerationFlattenDto.cs" />
     <Compile Include="Classes\Grandson.cs" />
-    <Compile Include="Classes\SonGrandson.cs" />
-    <Compile Include="Classes\FatherSon.cs" />
+    <Compile Include="Classes\Son.cs" />
+    <Compile Include="Classes\Father.cs" />
     <Compile Include="Classes\SimpleClassDto.cs" />
     <Compile Include="Classes\SimpleClass.cs" />
+    <Compile Include="EfClasses\DatabaseHelpers.cs" />
+    <Compile Include="EfClasses\TryMapperDb.cs" />
     <Compile Include="Flatteners\FlattenMapper.cs" />
     <Compile Include="Flatteners\Internal\LinqMethod.cs" />
     <Compile Include="Flatteners\Internal\ExpressMemberInfo.cs" />
@@ -70,10 +80,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitTests\Test05CompareMappersLinqMethods.cs" />
     <Compile Include="UnitTests\Test02CompareMappersLinq.cs" />
+    <Compile Include="UnitTests\Test10CompareMappersEntityFramework.cs" />
     <Compile Include="UnitTests\Test20FlattenMapper.cs" />
     <Compile Include="UnitTests\Test01CompareMappersDirect.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />

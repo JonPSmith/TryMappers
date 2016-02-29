@@ -1,7 +1,7 @@
 ﻿#region licence
 // ======================================================================================
 // TryMappers - compare AutoMapper and ExpressMapper for LINQ and develop flattener for ExpressMapper
-// Filename: SonGrandson.cs
+// Filename: FatherSon.cs
 // Date Created: 2016/02/26
 // 
 // Under the MIT License (MIT)
@@ -12,30 +12,35 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace TryMappers.Classes
 {
-    public class SonGrandson
+    public class Father
     {
+        [Key]
+        public int Id { get; set; }
+
         public int MyInt { get; set; }
         public string MyString { get; set; }
 
-        public Grandson Grandson { get; set; }
+        public Son Son { get; set; }
 
-        public static SonGrandson CreateOne(Random rand = null)
+
+        public static Father CreateOne(Random rand = null )
         {
             rand = rand ?? new Random();
-            return new SonGrandson
+            return new Father
             {
                 MyInt = rand.Next(),
-                MyString = "Son",
-                Grandson = Grandson.CreateOne(rand)
+                MyString = "Father",
+                Son = Son.CreateOne()
             };
         }
 
-        public static IEnumerable<SonGrandson> CreateMany(int num = 5, Random rand = null)
+        public static IEnumerable<Father> CreateMany(int num = 5)
         {
-            rand = rand ?? new Random();
+            var rand = new Random();
             for (int i = 0; i < num; i++)
             {
                 yield return CreateOne(rand);

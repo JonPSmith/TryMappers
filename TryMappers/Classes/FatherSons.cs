@@ -12,16 +12,20 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 namespace TryMappers.Classes
 {
     public class FatherSons
     {
+        [Key]
+        public int Id { get; set; }
+
         public int MyInt { get; set; }
         public string MyString { get; set; }
 
-        public ICollection<SonGrandson> Sons { get; set; }
+        public ICollection<Son> Sons { get; set; }
 
         public static FatherSons CreateOne(int numSons = 5, Random rand = null)
         {
@@ -30,7 +34,7 @@ namespace TryMappers.Classes
             {
                 MyInt = 1,
                 MyString = "Father",
-                Sons = SonGrandson.CreateMany(numSons, rand).ToList()
+                Sons = Son.CreateMany(numSons, rand).ToList()
             };
         }
 

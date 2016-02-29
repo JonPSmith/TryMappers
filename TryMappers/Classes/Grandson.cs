@@ -11,11 +11,15 @@
 #endregion
 
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace TryMappers.Classes
 {
     public class Grandson
     {
+        [Key]
+        public int Id { get; set; }
+
         public int MyInt { get; set; }
         public string MyString { get; set; }
 
