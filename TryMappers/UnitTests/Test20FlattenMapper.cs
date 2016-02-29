@@ -27,7 +27,7 @@ namespace TryMappers.UnitTests
             var f = new FlattenMapper<Father, GenerationFlattenDto>();
 
             //ATTEMPT
-            f.Register();
+            f.BuildMemberMapping();
 
             //VERIFY
             f.FoundFlattens.Count.ShouldEqual(4);

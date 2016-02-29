@@ -37,7 +37,7 @@ namespace TryMappers.Flatteners
 
         internal IReadOnlyCollection<ExpressMemberInfo> FoundFlattens => _foundFlattens.AsReadOnly();
 
-        public void Register()
+        public void BuildMemberMapping()
         {
             var filteredSourceProps = FilterOutExactMatches(_allSourceProps, _allDestProps);
             ScanSourceProps(filteredSourceProps);

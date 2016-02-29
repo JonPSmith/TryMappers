@@ -10,6 +10,7 @@
 // ======================================================================================
 #endregion
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper.QueryableExtensions;
@@ -86,12 +87,10 @@ namespace TryMappers.UnitTests
             using (new TimerToConsole($"automapper-map: GenerationFlattenDto - with null."))
             {
                 //ATTEMPT
-                var list = queryData.ProjectTo<GenerationFlattenDto>(config).ToList();        //force IQueryable to be executed
+                var ex = Assert.Throws<NullReferenceException>(() =>  queryData.ProjectTo<GenerationFlattenDto>(config).ToList());
 
                 //VERIFY
-                list.First().MyString.ShouldEqual("Father");
-                list.First().SonMyString.ShouldEqual("Son");
-                list.First().SonGrandsonMyString.ShouldEqual(null);
+                ex.Message.ShouldEqual("Object reference not set to an instance of an object.");
             }
         }
 
@@ -164,8 +163,8 @@ namespace TryMappers.UnitTests
                 ExpressMapper.Mapper.Register<Father, GenerationFlattenDto>()
                     .Member(dest => dest.SonMyInt, src => src.Son.MyInt)
                     .Member(dest => dest.SonGrandsonMyInt, src => src.Son.Grandson.MyInt)
-                    .Member(dest => dest.SonMyString, src => src.Son.MyString);
-                    //.Member(dest => dest.SonGrandsonMyString, src => src.Son.Grandson.MyString);
+                    .Member(dest => dest.SonMyString, src => src.Son.MyString)
+                    .Member(dest => dest.SonGrandsonMyString, src => src.Son.Grandson.MyString);
                 ExpressMapper.Mapper.Compile();
             }
             var single = Father.CreateOne();
@@ -174,12 +173,10 @@ namespace TryMappers.UnitTests
             using (new TimerToConsole($"ExpressMapper-map: GenerationFlattenDto - with null."))
             {
                 //ATTEMPT
-                var list = queryData.Project<Father, GenerationFlattenDto>().ToList();
+                var ex = Assert.Throws<NullReferenceException>(() => queryData.Project<Father, GenerationFlattenDto>().ToList());
 
                 //VERIFY
-                list.First().MyString.ShouldEqual("Father");
-                list.First().SonMyString.ShouldEqual("Son");
-                list.First().SonGrandsonMyString.ShouldEqual(null);
+                ex.Message.ShouldEqual("Object reference not set to an instance of an object.");
             }
         }
     }
