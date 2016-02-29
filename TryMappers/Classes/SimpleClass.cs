@@ -21,12 +21,12 @@ namespace TryMappers.Classes
         public string MyString { get; set; }
         public DateTime MyDateTime { get; set; }
 
-        public static SimpleClass CreateOne()
+        public static SimpleClass CreateOne(Random rand = null)
         {
-            var rand = new Random();
+            rand = rand ?? new Random();
             return new SimpleClass
             {
-                MyInt = rand.Next(),
+                MyInt = 1,
                 MyString = (rand.Next()).ToString(),
                 MyDateTime = new DateTime(2016, 1, rand.Next(1, 31))
             };
@@ -36,7 +36,7 @@ namespace TryMappers.Classes
         {
             for (int i = 0; i < num; i++)
             {
-                yield return CreateOne();
+                yield return CreateOne(new Random());
             }
         }
     }

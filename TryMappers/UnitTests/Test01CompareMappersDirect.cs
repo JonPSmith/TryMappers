@@ -1,7 +1,7 @@
 ﻿#region licence
 // ======================================================================================
 // TryMappers - compare AutoMapper and ExpressMapper for LINQ and develop flattener for ExpressMapper
-// Filename: Test01CompareMappers.cs
+// Filename: Test01CompareMappersDirect.cs
 // Date Created: 2016/02/25
 // 
 // Under the MIT License (MIT)
@@ -16,7 +16,7 @@ using TryMappers.Helpers;
 
 namespace TryMappers.UnitTests
 {
-    public class Test01CompareMappers
+    public class Test01CompareMappersDirect
     {
         [TestCase(1, 1)]
         [TestCase(1, 2)]

@@ -17,10 +17,9 @@ namespace TryMappers.Flatteners.Internal
 {
     internal class LinqMethod
     {
-        private static readonly Dictionary<string, LinqMethod> MethodLookup = new Dictionary<string, LinqMethod> 
+        private static readonly Dictionary<string, LinqMethod> EnumerableMethodLookup = new Dictionary<string, LinqMethod> 
         {
-            { "Count", new LinqMethod("Count") },
-            { "Sum", new LinqMethod("Sum") },
+            { "Count", new LinqMethod("Count") }
         };
 
 
@@ -34,10 +33,16 @@ namespace TryMappers.Flatteners.Internal
         /// </summary>
         public string MethodName { get; private set; }
 
-        public static LinqMethod MatchsWithLinqMethod(PropertyInfo destProp, string matchStart)
+        /// <summary>
+        /// This can be called on enumerable properly to see if the ending is a valid Linq method
+        /// </summary>
+        /// <param name="destProp"></param>
+        /// <param name="matchStart"></param>
+        /// <returns></returns>
+        public static LinqMethod EnumerableEndMatchsWithLinqMethod(PropertyInfo destProp, string matchStart)
         {
             var endOfName = destProp.Name.Substring(matchStart.Length);
-            return MethodLookup.ContainsKey(endOfName) ? MethodLookup[endOfName] : null;
+            return EnumerableMethodLookup.ContainsKey(endOfName) ? EnumerableMethodLookup[endOfName] : null;
         }
     }
 }

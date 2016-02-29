@@ -90,7 +90,7 @@ namespace TryMappers.Flatteners
                 {
                     //its an enumerable class so see if the end relates to a LINQ method
 
-                    var enumeableMethod = LinqMethod.MatchsWithLinqMethod(destProp, matchStart);
+                    var enumeableMethod = LinqMethod.EnumerableEndMatchsWithLinqMethod(destProp, matchStart);
                     if (enumeableMethod != null)
                     {
                         _foundFlattens.Add(new ExpressMemberInfo(destProp, sourcePropPath, matchedStartSrcProp, enumeableMethod));

@@ -71,7 +71,7 @@
     <Compile Include="UnitTests\Test05CompareMappersLinqMethods.cs" />
     <Compile Include="UnitTests\Test02CompareMappersLinq.cs" />
     <Compile Include="UnitTests\Test20FlattenMapper.cs" />
-    <Compile Include="UnitTests\Test01CompareMappers.cs" />
+    <Compile Include="UnitTests\Test01CompareMappersDirect.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

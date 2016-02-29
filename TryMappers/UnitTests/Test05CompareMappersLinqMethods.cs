@@ -39,7 +39,7 @@ namespace TryMappers.UnitTests
             using (new TimerToConsole($"automapper-map: FatherSonsCountDto - for {numTimes}."))
             {
                 //ATTEMPT
-                var list = queryData.ProjectTo<FatherSonsCountDto>(config).ToList();
+                var list = queryData.ProjectTo<FatherSonsCountDto>(config).ToList();//force IQueryable to be executed
 
                 //VERIFY
                 list.First().MyString.ShouldEqual("Father");
@@ -65,7 +65,7 @@ namespace TryMappers.UnitTests
             using (new TimerToConsole($"automapper-map: FatherSonsCountDto with conditional count - for {numTimes}."))
             {
                 //ATTEMPT
-                var list = queryData.ProjectTo<FatherSonsCountDto>(config).ToList();        //force IQueryable to be executed
+                var list = queryData.ProjectTo<FatherSonsCountDto>(config).ToList();//force IQueryable to be executed
 
                 //VERIFY
                 list.First().MyString.ShouldEqual("Father");
@@ -96,8 +96,7 @@ namespace TryMappers.UnitTests
             using (new TimerToConsole($"ExpressMapper-map: FatherSonsCountDto - for {numTimes}"))
             {
                 //ATTEMPT
-                var list = queryData.Project<FatherSons, FatherSonsCountDto>().ToList();
-                    //force IQueryable to be executed
+                var list = queryData.Project<FatherSons, FatherSonsCountDto>().ToList();//force IQueryable to be executed
 
                 //VERIFY   
                 list.First().MyString.ShouldEqual("Father");
@@ -112,7 +111,6 @@ namespace TryMappers.UnitTests
         public void Test11ExpressMapperFatherSonsWithWhereCountDtoOk(int numTimes, int count)
         {
             //SETUP
-
             ExpressMapper.Mapper.Reset();
             using (new TimerToConsole("ExpressMapper-setup: FatherSonsCountDto"))
             {
@@ -122,11 +120,10 @@ namespace TryMappers.UnitTests
             }
 
             var queryData = FatherSons.CreateMany(numTimes).AsQueryable();
-            using (new TimerToConsole($"ExpressMapper-map: FatherSonsCountDto - for {numTimes}"))
+            using (new TimerToConsole($"ExpressMapper-map: FatherSonsCountDto with conditional count - for {numTimes}"))
             {
                 //ATTEMPT
-                var list = queryData.Project<FatherSons, FatherSonsCountDto>().ToList();
-                    //force IQueryable to be executed
+                var list = queryData.Project<FatherSons, FatherSonsCountDto>().ToList();//force IQueryable to be executed
 
                 //VERIFY   
                 list.First().MyString.ShouldEqual("Father");
