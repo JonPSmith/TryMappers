@@ -75,6 +75,8 @@ namespace TryMappers.UnitTests
             mCode[i++].DestAsMemberExpression<GenerationFlattenDto>().ToString().ShouldEqual("dest.SonMyString");
             mCode[i++].DestAsMemberExpression<GenerationFlattenDto>().ToString().ShouldEqual("dest.SonGrandsonMyInt");
             mCode[i++].DestAsMemberExpression<GenerationFlattenDto>().ToString().ShouldEqual("dest.SonGrandsonMyString");
+
+            var xxx = mCode[0].DestAsMemberExpression<GenerationFlattenDto>();
         }
 
         [Test]

@@ -10,6 +10,7 @@
 // ======================================================================================
 #endregion
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -47,11 +48,11 @@ namespace TryMappers.Flatteners.Internal
 
         public override string ToString()
         {
-            var linqMethodStr = LinqMethodSuffix == null ? "" : LinqMethodSuffix.ToString();
+            var linqMethodStr = LinqMethodSuffix?.ToString() ?? "";
             return $"dest => dest.{DestMember.Name}, src => src.{string.Join(".",SourcePathMembers.Select(x => x.Name))}{linqMethodStr}";
         }
 
-        public MemberExpression DestAsMemberExpression<TDest>()
+        public MemberExpression  DestAsMemberExpression<TDest>()
         {
             return Expression.Property(Expression.Parameter(typeof(TDest), "dest"), DestMember);
         }
