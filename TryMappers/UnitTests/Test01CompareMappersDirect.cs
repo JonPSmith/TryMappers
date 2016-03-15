@@ -134,5 +134,40 @@ namespace TryMappers.UnitTests
                 }
             }
         }
+
+        [TestCase(1, 1)]
+        [TestCase(1, 2)]
+        [TestCase(100, 3)]
+        [TestCase(1000, 4)]
+        public void Test11ExpressMapperGenerationFlattenDtoReverseOk(int numTimes, int count)
+        {
+            //SETUP
+            ExpressMapper.Mapper.Reset();
+            using (new TimerToConsole("ExpressMapper-setup: GenerationFlattenDto"))
+            {
+                ExpressMapper.Mapper.Register<Father, GenerationFlattenDto>()
+                    .Member(dest => dest.SonMyInt, src => src.Son.MyInt)
+                    .Member(dest => dest.SonGrandsonMyInt, src => src.Son.Grandson.MyInt)
+                    .Member(dest => dest.SonMyString, src => src.Son.MyString)
+                    .Member(dest => dest.SonGrandsonMyString, src => src.Son.Grandson.MyString);
+                ExpressMapper.Mapper.Compile();
+            }
+            using (new TimerToConsole($"ExpressMapper-map: GenerationFlattenDto - for {numTimes}"))
+            {
+                for (int i = 0; i < numTimes; i++)
+                {
+                    //ATTEMPT
+                    var father = new Father();
+                    father.Son = new Son();
+                    father.Son.Grandson = new Grandson();
+                    ExpressMapper.Mapper.Map(GenerationFlattenDto.CreateOne(), father);
+
+                    //VERIFY   
+                    father.MyString.ShouldEqual("Father");
+                    father.Son.MyString.ShouldEqual("Son");
+                    father.Son.Grandson.MyString.ShouldEqual("Grandson");
+                }
+            }
+        }
     }
 }

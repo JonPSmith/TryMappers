@@ -9,6 +9,9 @@
 // Written by Jon Smith : GitHub JonPSmith, www.thereformedprogrammer.net
 // ======================================================================================
 #endregion
+
+using System;
+
 namespace TryMappers.Classes
 {
     public class GenerationFlattenDto
@@ -21,5 +24,20 @@ namespace TryMappers.Classes
 
         public int SonGrandsonMyInt { get; set; }
         public string SonGrandsonMyString { get; set; }
+
+
+        public static GenerationFlattenDto CreateOne(Random rand = null)
+        {
+            rand = rand ?? new Random();
+            return new GenerationFlattenDto
+            {
+                MyInt = rand.Next(),
+                MyString = "Father",
+                SonMyInt = 2,
+                SonMyString = "Son",
+                SonGrandsonMyInt = 3,
+                SonGrandsonMyString = "Grandson"
+            };
+        }
     }
 }

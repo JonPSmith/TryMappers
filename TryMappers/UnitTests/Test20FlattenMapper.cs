@@ -21,7 +21,7 @@ namespace TryMappers.UnitTests
     public class Test20FlattenMapper
     {
         [Test]
-        public void Test01FlattenFatherOk()
+        public void Test01FlattenFatherToStringOk()
         {
             //SETUP
             var f = new FlattenMapper<Father, GenerationFlattenDto>();
@@ -40,7 +40,45 @@ namespace TryMappers.UnitTests
         }
 
         [Test]
-        public void Test01FlattenFatherSonsOk()
+        public void Test02FlattenFatherSourceAsExpressionOk()
+        {
+            //SETUP
+            var f = new FlattenMapper<Father, GenerationFlattenDto>();
+
+            //ATTEMPT
+            f.BuildMemberMapping();
+
+            //VERIFY
+            f.FoundFlattens.Count.ShouldEqual(4);
+            var mCode = f.FoundFlattens.ToList();
+            var i = 0;
+            mCode[i++].SourceAsExpression<Father>().ToString().ShouldEqual("src.Son.MyInt");
+            mCode[i++].SourceAsExpression<Father>().ToString().ShouldEqual("src.Son.MyString");
+            mCode[i++].SourceAsExpression<Father>().ToString().ShouldEqual("src.Son.Grandson.MyInt");
+            mCode[i++].SourceAsExpression<Father>().ToString().ShouldEqual("src.Son.Grandson.MyString");
+        }
+
+        [Test]
+        public void Test03FlattenFatherSourceAsExpressionOk()
+        {
+            //SETUP
+            var f = new FlattenMapper<Father, GenerationFlattenDto>();
+
+            //ATTEMPT
+            f.BuildMemberMapping();
+
+            //VERIFY
+            f.FoundFlattens.Count.ShouldEqual(4);
+            var mCode = f.FoundFlattens.ToList();
+            var i = 0;
+            mCode[i++].DestAsMemberExpression<GenerationFlattenDto>().ToString().ShouldEqual("dest.SonMyInt");
+            mCode[i++].DestAsMemberExpression<GenerationFlattenDto>().ToString().ShouldEqual("dest.SonMyString");
+            mCode[i++].DestAsMemberExpression<GenerationFlattenDto>().ToString().ShouldEqual("dest.SonGrandsonMyInt");
+            mCode[i++].DestAsMemberExpression<GenerationFlattenDto>().ToString().ShouldEqual("dest.SonGrandsonMyString");
+        }
+
+        [Test]
+        public void Test10FlattenFatherSonsOk()
         {
             //SETUP
             var f = new FlattenMapper<FatherSons, FatherSonsCountDto>();
@@ -53,6 +91,38 @@ namespace TryMappers.UnitTests
             var mCode = f.FoundFlattens.ToList();
             var i = 0;
             mCode[i++].ToString().ShouldEqual("dest => dest.SonsCount, src => src.Sons.Count()");
+        }
+
+        [Test]
+        public void Test12FlattenFatherSonsSourceAsExpressionOk()
+        {
+            //SETUP
+            var f = new FlattenMapper<FatherSons, FatherSonsCountDto>();
+
+            //ATTEMPT
+            f.BuildMemberMapping();
+
+            //VERIFY
+            f.FoundFlattens.Count.ShouldEqual(1);
+            var mCode = f.FoundFlattens.ToList();
+            var i = 0;
+            mCode[i++].SourceAsExpression<FatherSons>().ToString().ShouldEqual("src.Sons.Count()");
+        }
+
+        [Test]
+        public void Test13FlattenFatherSonsSourceAsExpressionOk()
+        {
+            //SETUP
+            var f = new FlattenMapper<FatherSons, FatherSonsCountDto>();
+
+            //ATTEMPT
+            f.BuildMemberMapping();
+
+            //VERIFY
+            f.FoundFlattens.Count.ShouldEqual(1);
+            var mCode = f.FoundFlattens.ToList();
+            var i = 0;
+            mCode[i++].DestAsMemberExpression<FatherSonsCountDto>().ToString().ShouldEqual("dest.SonsCount");
         }
     }
 }

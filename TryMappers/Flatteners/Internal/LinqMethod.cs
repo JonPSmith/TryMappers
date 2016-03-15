@@ -10,8 +10,13 @@
 // ======================================================================================
 #endregion
 
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
+using TryMappers.Classes;
 
 namespace TryMappers.Flatteners.Internal
 {
@@ -21,7 +26,6 @@ namespace TryMappers.Flatteners.Internal
         {
             { "Count", new LinqMethod("Count") }
         };
-
 
         private LinqMethod(string methodName)
         {
@@ -48,6 +52,18 @@ namespace TryMappers.Flatteners.Internal
         public override string ToString()
         {
             return $".{MethodName}()";
+        }
+
+        public MethodCallExpression AsMethodCallExpression(Expression propertyExpression, PropertyInfo propertyToActOn)
+        {
+            var ienumerableType = propertyToActOn.PropertyType.GetGenericArguments().Single();
+
+            var method = typeof(Enumerable).GetMethods()
+                                           .Where(m => m.Name == MethodName)
+                                           .Single(m => m.GetParameters().Length == 1)
+                                           .MakeGenericMethod(ienumerableType);
+
+            return Expression.Call(method, propertyExpression);
         }
     }
 }
