@@ -10,12 +10,10 @@
 // ======================================================================================
 #endregion
 
-using System;
 using System.Linq.Expressions;
 using System.Reflection;
 using NUnit.Framework;
 using TryMappers.Classes;
-using TryMappers.Flatteners;
 using TryMappers.Flatteners.Internal;
 using TryMappers.Helpers;
 
@@ -69,31 +67,5 @@ namespace TryMappers.UnitTests
             mce.Method.Name.ShouldEqual(method);
         }
 
-        // "Average", "Max", "Min", "Sum"
-
-        [TestCase("Ints", "Average")]
-        [TestCase("Ints", "Max")]
-        [TestCase("Ints", "Min")]
-        [TestCase("Ints", "Sum")]
-        [TestCase("Doubles", "Average")]
-        [TestCase("Doubles", "Max")]
-        [TestCase("Doubles", "Min")]
-        [TestCase("Doubles", "Sum")]
-        public void Test03AggregateMethodsOk(string srcName, string method)
-        {
-            //SETUP
-            var sourceClass = new LinqAggregates();
-            var scrMember = sourceClass.GetType().GetProperty(srcName, BindingFlags.Public | BindingFlags.Instance);
-            var dto = new LinqAggregateMethodsDto();
-            var destMember = dto.GetType().GetProperty(srcName + method, BindingFlags.Public | BindingFlags.Instance);
-            var propExp = Expression.Property(Expression.Parameter(sourceClass.GetType(), "src"), scrMember);
-
-            //ATTEMPT
-            var lm = LinqMethod.EnumerableEndMatchsWithLinqMethod(method);
-            var mce = lm.AsMethodCallExpression(propExp, scrMember, destMember);
-
-            //VERIFY
-            mce.Method.Name.ShouldEqual(method);
-        }
     }
 }

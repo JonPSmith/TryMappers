@@ -25,9 +25,7 @@ namespace TryMappers.Flatteners.Internal
         private static readonly string[] ListOfSupportedLinqMethods = new[]
         {
             "Any", "Count", "LongCount",
-            "~First", "~FirstOrDefault", "~Last", "~LastOrDefault", "~Single", "~SingleOrDefault",
-            //These are not applicable to Entity Framework as EF doesn't allow a property only holding a value
-            "Average", "Max", "Min", "Sum",   
+            "~First", "~FirstOrDefault", "~Last", "~LastOrDefault", "~Single", "~SingleOrDefault" 
         };
 
         private static readonly Dictionary<string, LinqMethod> EnumerableMethodLookup;
@@ -77,42 +75,20 @@ namespace TryMappers.Flatteners.Internal
         {
             var ienumerableType = propertyToActOn.PropertyType.GetGenericArguments().Single();
 
-            var foundMethodsWithParams = (from eachMethod in typeof (Enumerable).GetMethods()
-                .Where(m => m.Name == _methodName
-                            && (!_checkReturnType || m.ReturnType == destProperty.PropertyType))
-                let ctorParams = eachMethod.GetParameters()
-                where ctorParams.Length == 1
-                select new {methodInfo = eachMethod, ctorParams}).ToArray();
+            var foundMethodInfo = typeof (Enumerable).GetMethods()
+                .Single(m => m.Name == _methodName && m.GetParameters().Length == 1
+                        && (!_checkReturnType || m.ReturnType == destProperty.PropertyType));
 
-
-            if (!foundMethodsWithParams.Any())
+            if (foundMethodInfo == null)
                 throw new InvalidOperationException(
                     $"We could not find the Method {_methodName} which matched the {destProperty.Name} which has the type {destProperty.PropertyType}.");
 
-            if (foundMethodsWithParams.Length > 1)
-            {
-                if (!foundMethodsWithParams.First().methodInfo.IsGenericMethod)
-                {
-                    //There can be multiple of a non generic method, so we search for the one with the right input type
-                    foundMethodsWithParams = foundMethodsWithParams
-                        .Where(x => x.ctorParams.First().ParameterType.IsGenericType
-                            && x.ctorParams.Single().ParameterType.GetGenericArguments().Single() == ienumerableType).ToArray();
-                    if (foundMethodsWithParams.Length != 1)
-                        throw new InvalidOperationException(
-                            $"We could not find the Method {_methodName} which matched the {destProperty.Name} type and has the type {destProperty.PropertyType}.");
-                }
-                else
-                {
-                    throw new InvalidOperationException(
-                        $"Ambiguous {_methodName} for {destProperty.Name}. This is a system error so report to author.");
-                }
-            }
-
-            var method = foundMethodsWithParams.Single().methodInfo.IsGenericMethod 
-                ? foundMethodsWithParams.Single().methodInfo.MakeGenericMethod(ienumerableType) 
-                : foundMethodsWithParams.Single().methodInfo;
+            var method = foundMethodInfo.IsGenericMethod
+                ? foundMethodInfo.MakeGenericMethod(ienumerableType)
+                : foundMethodInfo;
 
             return Expression.Call(method, propertyExpression);
         }
+
     }
 }

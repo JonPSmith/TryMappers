@@ -65,7 +65,6 @@
     <Compile Include="Classes\FatherSonsCountDto.cs" />
     <Compile Include="Classes\GenerationFlattenDto.cs" />
     <Compile Include="Classes\Grandson.cs" />
-    <Compile Include="Classes\LinqAggregates.cs" />
     <Compile Include="Classes\LinqAggregateMethodsDto.cs" />
     <Compile Include="Classes\LinqSingleMethodsDto.cs" />
     <Compile Include="Classes\LinqCollectionMethodsDto.cs" />
