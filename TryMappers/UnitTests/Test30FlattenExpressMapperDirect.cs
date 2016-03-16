@@ -25,7 +25,7 @@ namespace TryMappers.UnitTests
         {
             //SETUP
             ExpressMapper.Mapper.Reset();
-            ExpressMapper.Mapper.Register<Father, GenerationFlattenDto>().Flatten();
+            ExpressMapper.Mapper.Register<Father, GenerationFlattenDto>().FlattenSource();
             ExpressMapper.Mapper.Compile();
             
             //ATTEMPT
@@ -36,6 +36,42 @@ namespace TryMappers.UnitTests
             dto.MyString.ShouldEqual("Father");
             dto.SonMyString.ShouldEqual("Son");
             dto.SonGrandsonMyString.ShouldEqual("Grandson");
+        }
+
+        [Test]
+        public void Test02ExpressMapperGenerationFlattenDtoOverrideOk()
+        {
+            //SETUP
+            ExpressMapper.Mapper.Reset();
+            ExpressMapper.Mapper.Register<Father, GenerationFlattenDto>()
+                .Member(dest => dest.SonGrandsonMyString, src => src.MyString).FlattenSource();
+            ExpressMapper.Mapper.Compile();
+
+            //ATTEMPT
+            var dto = new GenerationFlattenDto();
+            ExpressMapper.Mapper.Map(Father.CreateOne(), dto);
+
+            //VERIFY   
+            dto.MyString.ShouldEqual("Father");
+            dto.SonMyString.ShouldEqual("Son");
+            dto.SonGrandsonMyString.ShouldEqual("Father");
+        }
+
+        [Test]
+        public void Test10ExpressMapperFatherSonsCountDtoOk()
+        {
+            //SETUP
+            ExpressMapper.Mapper.Reset();
+            ExpressMapper.Mapper.Register<FatherSons, FatherSonsCountDto>().FlattenSource();
+            ExpressMapper.Mapper.Compile();
+
+            //ATTEMPT
+            var dto = new FatherSonsCountDto();
+            ExpressMapper.Mapper.Map(FatherSons.CreateOne(), dto);
+
+            //VERIFY   
+            dto.MyString.ShouldEqual("Father");
+            dto.SonsCount.ShouldEqual(5);
         }
     }
 }

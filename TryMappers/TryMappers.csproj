@@ -81,6 +81,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitTests\Test05CompareMappersLinqMethods.cs" />
     <Compile Include="UnitTests\Test02CompareMappersLinq.cs" />
+    <Compile Include="UnitTests\Test50FlattenExpressMapperEntityFramework.cs" />
     <Compile Include="UnitTests\Test10CompareMappersEntityFramework.cs" />
     <Compile Include="UnitTests\Test20FlattenMapper.cs" />
     <Compile Include="UnitTests\Test01CompareMappersDirect.cs" />

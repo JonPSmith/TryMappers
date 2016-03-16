@@ -16,16 +16,14 @@ namespace TryMappers.Flatteners
 {
     public static class ExpressMapperExtension
     {
-        public static IMemberConfiguration<TSource, TDest> Flatten<TSource, TDest>(this IMemberConfiguration<TSource, TDest> register)
+        public static void FlattenSource<TSource, TDest>(this IMemberConfiguration<TSource, TDest> register)
         {
             var f = new FlattenMapper<TSource, TDest>();
             f.BuildMemberMapping();
             foreach (var flattenInfo in f.FoundFlattens)
             {
-                register.Member(flattenInfo.DestAsMemberExpression<TDest>(), flattenInfo.SourceAsExpression<TSource>());
+                register.MemberComputed(flattenInfo.DestAsMemberExpression<TDest>(), flattenInfo.SourceAsExpression<TSource>());
             }
-
-            return register;
         }
     }
 }
