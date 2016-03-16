@@ -17,10 +17,6 @@ namespace TryMappers.Classes
         public int SonsCount { get; set; }
         public long SonsLongCount { get; set; }
 
-        public Son SonsFirst { get; set; }
         public Son SonsFirstOrDefault { get; set; }
-
-        public Son SonsLast { get; set; }
-        public Son SonsLastOrDefault { get; set; }
     }
 }

@@ -123,5 +123,27 @@ namespace TryMappers.UnitTests
                 list.First().SonsCount.ShouldEqual(DatabaseHelpers.NumSonsToFatherSons);
             }
         }
+
+        [Test]
+        public void Test20ExpressMapperLinqCollectionMethodsDto()
+        {
+            //SETUP
+            ExpressMapper.Mapper.Reset();
+            ExpressMapper.Mapper.Register<FatherSons, LinqCollectionMethodsDto>().FlattenSource();
+            ExpressMapper.Mapper.Compile();
+
+            //ATTEMPT
+            using (var db = new TryMapperDb())
+            {
+                var list = db.FatherSons.Project<FatherSons, LinqCollectionMethodsDto>().ToList();
+
+                //VERIFY
+                list.Count.ShouldEqual(DatabaseHelpers.NumFathersWithGrandsons);
+                list.All(x => x.SonsAny).ShouldEqual(true);
+                list.All(x => x.SonsCount == 5).ShouldEqual(true);
+                list.All(x => x.SonsLongCount == 5).ShouldEqual(true);
+                list.All(x => x.SonsFirstOrDefault.MyString == "Son").ShouldEqual(true);
+            }
+        }
     }
 }

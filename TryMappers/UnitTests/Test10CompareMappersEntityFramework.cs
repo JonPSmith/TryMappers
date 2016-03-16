@@ -117,6 +117,27 @@ namespace TryMappers.UnitTests
             }
         }
 
+        [Ignore("AutoMapper cannot handle some of the LINQ features")]
+        [Test]
+        public void Test07AutoMapperLinqCollectionMethodsDto()
+        {
+            //SETUP
+            AutoMapper.MapperConfiguration config = new AutoMapper.MapperConfiguration(cfg => cfg.CreateMap<FatherSons, LinqCollectionMethodsDto>());
+
+            //ATTEMPT
+            using (var db = new TryMapperDb())
+            {
+                var list = db.FatherSons.Project<FatherSons, LinqCollectionMethodsDto>().ToList();
+
+                //VERIFY
+                list.Count.ShouldEqual(DatabaseHelpers.NumFathersWithGrandsons);
+                list.All(x => x.SonsAny).ShouldEqual(true);
+                list.All(x => x.SonsCount == 5).ShouldEqual(true);
+                list.All(x => x.SonsLongCount == 5).ShouldEqual(true);
+                list.All(x => x.SonsFirstOrDefault.MyString == "Son").ShouldEqual(true);
+            }
+        }
+
 
         //-----------------------------------------------------------------------
         //ExpressMapper
@@ -210,6 +231,33 @@ namespace TryMappers.UnitTests
                 list.Count.ShouldEqual(DatabaseHelpers.NumFathersWithGrandsons);
                 list.First().MyInt.ShouldEqual(1);
                 list.First().SonsCount.ShouldEqual(DatabaseHelpers.NumSonsToFatherSons);
+            }
+        }
+
+
+        [Test]
+        public void Test17ExpressMapperLinqCollectionMethodsDto()
+        {
+            //SETUP
+            ExpressMapper.Mapper.Reset();
+            ExpressMapper.Mapper.Register<FatherSons, LinqCollectionMethodsDto>()
+                .Member(dest => dest.SonsAny, src => src.Sons.Any())
+                .Member(dest => dest.SonsCount, src => src.Sons.Count())
+                .Member(dest => dest.SonsLongCount, src => src.Sons.LongCount())
+                .Member(dest => dest.SonsFirstOrDefault, src => src.Sons.FirstOrDefault());
+            ExpressMapper.Mapper.Compile();
+
+            //ATTEMPT
+            using (var db = new TryMapperDb())
+            {
+                var list = db.FatherSons.Project<FatherSons, LinqCollectionMethodsDto>().ToList();
+
+                //VERIFY
+                list.Count.ShouldEqual(DatabaseHelpers.NumFathersWithGrandsons);
+                list.All(x => x.SonsAny).ShouldEqual(true);
+                list.All(x => x.SonsCount == 5).ShouldEqual(true);
+                list.All(x => x.SonsLongCount == 5).ShouldEqual(true);
+                list.All(x => x.SonsFirstOrDefault.MyString == "Son").ShouldEqual(true);
             }
         }
     }
