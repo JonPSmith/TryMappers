@@ -88,8 +88,8 @@ namespace TryMappers.Flatteners
                 else if (matchedStartSrcProp.PropertyType.GetInterface("IEnumerable") != null)
                 {
                     //its an enumerable class so see if the end relates to a LINQ method
-
-                    var enumeableMethod = LinqMethod.EnumerableEndMatchsWithLinqMethod(destProp, matchStart);
+                    var endOfName = destProp.Name.Substring(matchStart.Length);
+                    var enumeableMethod = LinqMethod.EnumerableEndMatchsWithLinqMethod(endOfName);
                     if (enumeableMethod != null)
                     {
                         _foundFlattens.Add(new ExpressMemberInfo(destProp, sourcePropPath, matchedStartSrcProp, enumeableMethod));

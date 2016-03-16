@@ -83,7 +83,7 @@ namespace TryMappers.Flatteners.Internal
 
             return LinqMethodSuffix == null
                 ? (Expression)finalProperty
-                : LinqMethodSuffix.AsMethodCallExpression(finalProperty, properties[0]);
+                : LinqMethodSuffix.AsMethodCallExpression(finalProperty, properties[0], DestMember);
         }
 
     }

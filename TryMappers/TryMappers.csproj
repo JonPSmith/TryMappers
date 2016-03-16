@@ -65,6 +65,10 @@
     <Compile Include="Classes\FatherSonsCountDto.cs" />
     <Compile Include="Classes\GenerationFlattenDto.cs" />
     <Compile Include="Classes\Grandson.cs" />
+    <Compile Include="Classes\LinqAggregates.cs" />
+    <Compile Include="Classes\LinqAggregateMethodsDto.cs" />
+    <Compile Include="Classes\LinqSingleMethodsDto.cs" />
+    <Compile Include="Classes\LinqCollectionMethodsDto.cs" />
     <Compile Include="Classes\Son.cs" />
     <Compile Include="Classes\Father.cs" />
     <Compile Include="Classes\SimpleClassDto.cs" />
@@ -81,6 +85,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitTests\Test05CompareMappersLinqMethods.cs" />
     <Compile Include="UnitTests\Test02CompareMappersLinq.cs" />
+    <Compile Include="UnitTests\Test15LinqMethod.cs" />
     <Compile Include="UnitTests\Test50FlattenExpressMapperEntityFramework.cs" />
     <Compile Include="UnitTests\Test10CompareMappersEntityFramework.cs" />
     <Compile Include="UnitTests\Test20FlattenMapper.cs" />
