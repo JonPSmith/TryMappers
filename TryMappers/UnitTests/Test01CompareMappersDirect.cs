@@ -10,6 +10,8 @@
 // ======================================================================================
 #endregion
 
+using System;
+using ExpressMapper;
 using NUnit.Framework;
 using TryMappers.Classes;
 using TryMappers.Helpers;
@@ -106,7 +108,43 @@ namespace TryMappers.UnitTests
         [TestCase(1, 2)]
         [TestCase(100, 3)]
         [TestCase(1000, 4)]
-        public void Test11ExpressMapperGenerationFlattenDtoOk(int numTimes, int count)
+        public void Test11ExpressMapperSimpleClassOk(int numTimes, int count)
+        {
+            //SETUP
+            ExpressMapper.Mapper.Reset();
+            using (new TimerToConsole("ExpressMapper-setup: SimpleClass and SimpleClassDto"))
+            {
+                ExpressMapper.Mapper.Register<SimpleClass, SimpleClassDto>();
+                ExpressMapper.Mapper.Register<SimpleClassDto, SimpleClass>();       //check this doesn't clash
+                ExpressMapper.Mapper.Compile(CompilationTypes.Source);
+            }
+            using (new TimerToConsole($"ExpressMapper-map: SimpleClass - for {numTimes}"))
+            {
+                for (int i = 0; i < numTimes; i++)
+                {
+                    //ATTEMPT
+                    var dest = new SimpleClass();
+                    var source = new SimpleClassDto()
+                    {
+                        MyInt = 1,
+                        MyString = "Dto",
+                        MyDateTime = new DateTime(2015, 1,1)
+                    };
+                    ExpressMapper.Mapper.Map(source, dest);
+
+                    //VERIFY   
+                    dest.MyInt.ShouldEqual(1);
+                    dest.MyString.ShouldEqual("Dto");
+                    dest.MyDateTime.Year.ShouldEqual(2015);
+                }
+            }
+        }
+
+        [TestCase(1, 1)]
+        [TestCase(1, 2)]
+        [TestCase(100, 3)]
+        [TestCase(1000, 4)]
+        public void Test15ExpressMapperGenerationFlattenDtoOk(int numTimes, int count)
         {
             //SETUP
             ExpressMapper.Mapper.Reset();
