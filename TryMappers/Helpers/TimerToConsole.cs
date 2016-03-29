@@ -21,9 +21,9 @@ namespace TryMappers.Helpers
 
         private readonly Stopwatch _timer;
 
-        public TimerToConsole(string message)
+        public TimerToConsole([System.Runtime.CompilerServices.CallerMemberName] string memberName = "")
         {
-            _message = message;
+            _message = memberName;
             _timer = new Stopwatch();
             _timer.Start();
         }

@@ -31,12 +31,12 @@ namespace TryMappers.UnitTests
         {
             //SETUP
             AutoMapper.MapperConfiguration config;
-            using (new TimerToConsole($"automapper-setup: FatherSonsCountDto - {count} time"))
+            using (new TimerToConsole())
             {
                 config = new AutoMapper.MapperConfiguration(cfg => cfg.CreateMap<FatherSons, FatherSonsCountDto>());
             }
             var queryData = FatherSons.CreateMany(numTimes).AsQueryable();
-            using (new TimerToConsole($"automapper-map: FatherSonsCountDto - for {numTimes}."))
+            using (new TimerToConsole())
             {
                 //ATTEMPT
                 var list = queryData.ProjectTo<FatherSonsCountDto>(config).ToList();//force IQueryable to be executed
@@ -55,14 +55,14 @@ namespace TryMappers.UnitTests
         {
             //SETUP
             AutoMapper.MapperConfiguration config;
-            using (new TimerToConsole($"automapper-setup: FatherSonsCountDto - {count} time"))
+            using (new TimerToConsole())
             {
                 config = new AutoMapper.MapperConfiguration(cfg => cfg.CreateMap<FatherSons, FatherSonsCountDto>()
                 .ForMember(dest => dest.SonsCount,
                     opt => opt.MapFrom(c => c.Sons.Count(e => e.MyInt > Int32.MaxValue/2))));
             }
             var queryData = FatherSons.CreateMany(numTimes).AsQueryable();
-            using (new TimerToConsole($"automapper-map: FatherSonsCountDto with conditional count - for {numTimes}."))
+            using (new TimerToConsole())
             {
                 //ATTEMPT
                 var list = queryData.ProjectTo<FatherSonsCountDto>(config).ToList();//force IQueryable to be executed
@@ -85,7 +85,7 @@ namespace TryMappers.UnitTests
         {
             //SETUP
             ExpressMapper.Mapper.Reset();
-            using (new TimerToConsole("ExpressMapper-setup: FatherSonsCountDto"))
+            using (new TimerToConsole())
             {
                 ExpressMapper.Mapper.Register<FatherSons, FatherSonsCountDto>()
                     .Member(dest => dest.SonsCount, src => src.Sons.Count());
@@ -93,7 +93,7 @@ namespace TryMappers.UnitTests
             }
 
             var queryData = FatherSons.CreateMany(numTimes).AsQueryable();
-            using (new TimerToConsole($"ExpressMapper-map: FatherSonsCountDto - for {numTimes}"))
+            using (new TimerToConsole())
             {
                 //ATTEMPT
                 var list = queryData.Project<FatherSons, FatherSonsCountDto>().ToList();//force IQueryable to be executed
@@ -112,7 +112,7 @@ namespace TryMappers.UnitTests
         {
             //SETUP
             ExpressMapper.Mapper.Reset();
-            using (new TimerToConsole("ExpressMapper-setup: FatherSonsCountDto"))
+            using (new TimerToConsole())
             {
                 ExpressMapper.Mapper.Register<FatherSons, FatherSonsCountDto>()
                     .Member(dest => dest.SonsCount, src => src.Sons.Count(e => e.MyInt > Int32.MaxValue/2));
@@ -120,7 +120,7 @@ namespace TryMappers.UnitTests
             }
 
             var queryData = FatherSons.CreateMany(numTimes).AsQueryable();
-            using (new TimerToConsole($"ExpressMapper-map: FatherSonsCountDto with conditional count - for {numTimes}"))
+            using (new TimerToConsole())
             {
                 //ATTEMPT
                 var list = queryData.Project<FatherSons, FatherSonsCountDto>().ToList();//force IQueryable to be executed

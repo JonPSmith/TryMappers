@@ -28,11 +28,11 @@ namespace TryMappers.UnitTests
         {
             //SETUP
             AutoMapper.MapperConfiguration config;
-            using (new TimerToConsole($"automapper-setup: SimpleClass - {count} time"))
+            using (new TimerToConsole())
             {
                 config = new AutoMapper.MapperConfiguration(cfg => cfg.CreateMap<SimpleClass, SimpleClassDto>());
             }
-            using (new TimerToConsole($"automapper-map: SimpleClass - for {numTimes}."))
+            using (new TimerToConsole())
             {
                 for (int i = 0; i < numTimes; i++)
                 {
@@ -54,11 +54,11 @@ namespace TryMappers.UnitTests
         {
             //SETUP
             AutoMapper.MapperConfiguration config;
-            using (new TimerToConsole($"automapper-setup: GenerationFlattenDto - {count} time"))
+            using (new TimerToConsole())
             {
                 config = new AutoMapper.MapperConfiguration(cfg => cfg.CreateMap<Father, GenerationFlattenDto>());
             }
-            using (new TimerToConsole($"automapper-map: GenerationFlattenDto - for {numTimes}."))
+            using (new TimerToConsole())
             {
                 for (int i = 0; i < numTimes; i++)
                 {
@@ -74,6 +74,66 @@ namespace TryMappers.UnitTests
             }
         }
 
+        [TestCase(1, 1)]
+        [TestCase(1, 2)]
+        [TestCase(100, 3)]
+        [TestCase(1000, 4)]
+        public void Test03AutoMapperGenerationFlattenLowerCaseDtoOk(int numTimes, int count)
+        {
+            //SETUP
+            AutoMapper.MapperConfiguration config;
+            using (new TimerToConsole())
+            {
+                config = new AutoMapper.MapperConfiguration(cfg => cfg.CreateMap<Father, GenerationFlattenLowerCaseDto>());
+            }
+            using (new TimerToConsole())
+            {
+                for (int i = 0; i < numTimes; i++)
+                {
+                    //ATTEMPT
+                    var mapper = config.CreateMapper();
+                    var dto = mapper.Map<GenerationFlattenLowerCaseDto>(Father.CreateOne());
+
+                    //VERIFY
+                    dto.mystring.ShouldEqual("Father");
+                    dto.sonmystring.ShouldEqual("Son");
+                    dto.Songrandsonmystring.ShouldEqual("Grandson");
+                }
+            }
+        }
+
+        [TestCase(1, 1)]
+        [TestCase(1, 2)]
+        [TestCase(100, 3)]
+        [TestCase(1000, 4)]
+        public void Test03AutoMapperGenerationFlattenGrandsonSimpleDtoOk(int numTimes, int count)
+        {
+            //SETUP
+            AutoMapper.MapperConfiguration config;
+            using (new TimerToConsole())
+            {
+                config = new AutoMapper.MapperConfiguration(cfg =>
+                {
+                    cfg.CreateMap<Grandson, SimpleClassDto>();
+                    cfg.CreateMap<Father, GenerationFlattenGrandsonSimpleDto>();
+                });
+            }
+            using (new TimerToConsole())
+            {
+                for (int i = 0; i < numTimes; i++)
+                {
+                    //ATTEMPT
+                    var mapper = config.CreateMapper();
+                    var dto = mapper.Map<GenerationFlattenGrandsonSimpleDto>(Father.CreateOne());
+
+                    //VERIFY
+                    dto.MyString.ShouldEqual("Father");
+                    dto.SonMyString.ShouldEqual("Son");
+                    dto.SonGrandson.MyString.ShouldEqual("Grandson");
+                }
+            }
+        }
+
         //--------------------------------------------------------
         //ExpressMapper
 
@@ -85,12 +145,12 @@ namespace TryMappers.UnitTests
         {
             //SETUP
             ExpressMapper.Mapper.Reset();
-            using (new TimerToConsole("ExpressMapper-setup: SimpleClass"))
+            using (new TimerToConsole())
             {
                 ExpressMapper.Mapper.Register<SimpleClass, SimpleClassDto>();
                 ExpressMapper.Mapper.Compile();
             }
-            using (new TimerToConsole($"ExpressMapper-map: SimpleClass - for {numTimes}"))
+            using (new TimerToConsole())
             {
                 for (int i = 0; i < numTimes; i++)
                 {
@@ -112,13 +172,13 @@ namespace TryMappers.UnitTests
         {
             //SETUP
             ExpressMapper.Mapper.Reset();
-            using (new TimerToConsole("ExpressMapper-setup: SimpleClass and SimpleClassDto"))
+            using (new TimerToConsole())
             {
                 ExpressMapper.Mapper.Register<SimpleClass, SimpleClassDto>();
                 ExpressMapper.Mapper.Register<SimpleClassDto, SimpleClass>();       //check this doesn't clash
                 ExpressMapper.Mapper.Compile(CompilationTypes.Source);
             }
-            using (new TimerToConsole($"ExpressMapper-map: SimpleClass - for {numTimes}"))
+            using (new TimerToConsole())
             {
                 for (int i = 0; i < numTimes; i++)
                 {
@@ -148,7 +208,7 @@ namespace TryMappers.UnitTests
         {
             //SETUP
             ExpressMapper.Mapper.Reset();
-            using (new TimerToConsole("ExpressMapper-setup: GenerationFlattenDto"))
+            using (new TimerToConsole())
             {
                 ExpressMapper.Mapper.Register<Father, GenerationFlattenDto>()
                     .Member(dest => dest.SonMyInt, src => src.Son.MyInt)
@@ -157,7 +217,7 @@ namespace TryMappers.UnitTests
                     .Member(dest => dest.SonGrandsonMyString, src => src.Son.Grandson.MyString);
                 ExpressMapper.Mapper.Compile();
             }
-            using (new TimerToConsole($"ExpressMapper-map: GenerationFlattenDto - for {numTimes}"))
+            using (new TimerToConsole())
             {
                 for (int i = 0; i < numTimes; i++)
                 {

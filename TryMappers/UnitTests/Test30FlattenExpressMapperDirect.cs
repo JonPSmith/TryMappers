@@ -12,7 +12,6 @@
 
 using NUnit.Framework;
 using TryMappers.Classes;
-using TryMappers.Flatteners;
 using TryMappers.Helpers;
 
 namespace TryMappers.UnitTests
@@ -25,7 +24,7 @@ namespace TryMappers.UnitTests
         {
             //SETUP
             ExpressMapper.Mapper.Reset();
-            ExpressMapper.Mapper.Register<Father, GenerationFlattenDto>().FlattenSource();
+            ExpressMapper.Mapper.Register<Father, GenerationFlattenDto>().Flatten();
             ExpressMapper.Mapper.Compile();
             
             //ATTEMPT
@@ -44,7 +43,7 @@ namespace TryMappers.UnitTests
             //SETUP
             ExpressMapper.Mapper.Reset();
             ExpressMapper.Mapper.Register<Father, GenerationFlattenDto>()
-                .Member(dest => dest.SonGrandsonMyString, src => src.MyString).FlattenSource();
+                .Member(dest => dest.SonGrandsonMyString, src => src.MyString).Flatten();
             ExpressMapper.Mapper.Compile();
 
             //ATTEMPT
@@ -62,7 +61,7 @@ namespace TryMappers.UnitTests
         {
             //SETUP
             ExpressMapper.Mapper.Reset();
-            ExpressMapper.Mapper.Register<FatherSons, FatherSonsCountDto>().FlattenSource();
+            ExpressMapper.Mapper.Register<FatherSons, FatherSonsCountDto>().Flatten();
             ExpressMapper.Mapper.Compile();
 
             //ATTEMPT

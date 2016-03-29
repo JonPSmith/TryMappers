@@ -12,6 +12,7 @@
 
 using System.Linq;
 using AutoMapper.QueryableExtensions;
+using ExpressMapper;
 using ExpressMapper.Extensions;
 using NUnit.Framework;
 using TryMappers.Classes;
@@ -49,6 +50,7 @@ namespace TryMappers.UnitTests
             AutoMapper.MapperConfiguration config = new AutoMapper.MapperConfiguration(cfg => cfg.CreateMap<Father, GenerationFlattenDto>());
 
             //ATTEMPT
+            using (new TimerToConsole())
             using (var db = new TryMapperDb())
             {
                 
@@ -68,6 +70,7 @@ namespace TryMappers.UnitTests
             AutoMapper.MapperConfiguration config = new AutoMapper.MapperConfiguration(cfg => cfg.CreateMap<Father, GenerationFlattenDto>());
 
             //ATTEMPT
+            using (new TimerToConsole())
             using (var db = new TryMapperDb())
             {
 
@@ -88,6 +91,7 @@ namespace TryMappers.UnitTests
             AutoMapper.MapperConfiguration config = new AutoMapper.MapperConfiguration(cfg => cfg.CreateMap<FatherSons, FatherSonsCountDto>());
 
             //ATTEMPT
+            using (new TimerToConsole())
             using (var db = new TryMapperDb())
             {
                 var list = db.FatherSons.ProjectTo<FatherSonsCountDto>(config).ToList();        //force IQueryable to be executed
@@ -106,6 +110,7 @@ namespace TryMappers.UnitTests
             AutoMapper.MapperConfiguration config = new AutoMapper.MapperConfiguration(cfg => cfg.CreateMap<FatherSons, FatherSonsCountDto>());
 
             //ATTEMPT
+            using (new TimerToConsole())
             using (var db = new TryMapperDb())
             {
                 var list = db.FatherSons.ProjectTo<FatherSonsCountDto>(config).ToList();        //force IQueryable to be executed
@@ -125,9 +130,10 @@ namespace TryMappers.UnitTests
             AutoMapper.MapperConfiguration config = new AutoMapper.MapperConfiguration(cfg => cfg.CreateMap<FatherSons, LinqCollectionMethodsDto>());
 
             //ATTEMPT
+            using (new TimerToConsole())
             using (var db = new TryMapperDb())
             {
-                var list = db.FatherSons.Project<FatherSons, LinqCollectionMethodsDto>().ToList();
+                var list = db.FatherSons.ProjectTo<LinqCollectionMethodsDto>(config).ToList();
 
                 //VERIFY
                 list.Count.ShouldEqual(DatabaseHelpers.NumFathersWithGrandsons);
@@ -138,7 +144,6 @@ namespace TryMappers.UnitTests
             }
         }
 
-
         //-----------------------------------------------------------------------
         //ExpressMapper
 
@@ -147,14 +152,11 @@ namespace TryMappers.UnitTests
         {
             //SETUP
             ExpressMapper.Mapper.Reset();
-            ExpressMapper.Mapper.Register<Father, GenerationFlattenDto>()
-                .Member(dest => dest.SonMyInt, src => src.Son.MyInt)
-                .Member(dest => dest.SonGrandsonMyInt, src => src.Son.Grandson.MyInt)
-                .Member(dest => dest.SonMyString, src => src.Son.MyString)
-                .Member(dest => dest.SonGrandsonMyString, src => src.Son.Grandson.MyString);
-            ExpressMapper.Mapper.Compile();
+            ExpressMapper.Mapper.Register<Father, GenerationFlattenDto>().Flatten();
+            ExpressMapper.Mapper.Compile(CompilationTypes.Source);
 
             //ATTEMPT
+            using (new TimerToConsole())
             using (var db = new TryMapperDb())
             {
                 var list = db.Fathers.Where(x => x.Son.Grandson != null).Project<Father, GenerationFlattenDto>().ToList();
@@ -172,14 +174,11 @@ namespace TryMappers.UnitTests
         {
             //SETUP
             ExpressMapper.Mapper.Reset();
-            ExpressMapper.Mapper.Register<Father, GenerationFlattenDto>()
-                .Member(dest => dest.SonMyInt, src => src.Son.MyInt)
-                .Member(dest => dest.SonGrandsonMyInt, src => src.Son.Grandson.MyInt)
-                .Member(dest => dest.SonMyString, src => src.Son.MyString)
-                .Member(dest => dest.SonGrandsonMyString, src => src.Son.Grandson.MyString);
-            ExpressMapper.Mapper.Compile();
+            ExpressMapper.Mapper.Register<Father, GenerationFlattenDto>().Flatten();
+            ExpressMapper.Mapper.Compile(CompilationTypes.Source);
 
             //ATTEMPT
+            using (new TimerToConsole())
             using (var db = new TryMapperDb())
             {
                 var list = db.Fathers.Where(x => x.Son.Grandson != null).Project<Father, GenerationFlattenDto>().ToList();
@@ -197,11 +196,11 @@ namespace TryMappers.UnitTests
         {
             //SETUP
             ExpressMapper.Mapper.Reset();
-            ExpressMapper.Mapper.Register<FatherSons, FatherSonsCountDto>()
-                .Member(dest => dest.SonsCount, src => src.Sons.Count());
-            ExpressMapper.Mapper.Compile();
+            ExpressMapper.Mapper.Register<FatherSons, FatherSonsCountDto>().Flatten();
+            ExpressMapper.Mapper.Compile(CompilationTypes.Source);
 
             //ATTEMPT
+            using (new TimerToConsole())
             using (var db = new TryMapperDb())
             {
                 var list = db.FatherSons.Project<FatherSons, FatherSonsCountDto>().ToList();
@@ -218,11 +217,11 @@ namespace TryMappers.UnitTests
         {
             //SETUP
             ExpressMapper.Mapper.Reset();
-            ExpressMapper.Mapper.Register<FatherSons, FatherSonsCountDto>()
-                .Member(dest => dest.SonsCount, src => src.Sons.Count());
-            ExpressMapper.Mapper.Compile();
+            ExpressMapper.Mapper.Register<FatherSons, FatherSonsCountDto>().Flatten();
+            ExpressMapper.Mapper.Compile(CompilationTypes.Source);
 
             //ATTEMPT
+            using (new TimerToConsole())
             using (var db = new TryMapperDb())
             {
                 var list = db.FatherSons.Project<FatherSons, FatherSonsCountDto>().ToList();
@@ -240,14 +239,11 @@ namespace TryMappers.UnitTests
         {
             //SETUP
             ExpressMapper.Mapper.Reset();
-            ExpressMapper.Mapper.Register<FatherSons, LinqCollectionMethodsDto>()
-                .Member(dest => dest.SonsAny, src => src.Sons.Any())
-                .Member(dest => dest.SonsCount, src => src.Sons.Count())
-                .Member(dest => dest.SonsLongCount, src => src.Sons.LongCount())
-                .Member(dest => dest.SonsFirstOrDefault, src => src.Sons.FirstOrDefault());
-            ExpressMapper.Mapper.Compile();
+            ExpressMapper.Mapper.Register<FatherSons, LinqCollectionMethodsDto>().Flatten();
+            ExpressMapper.Mapper.Compile(CompilationTypes.Source);
 
             //ATTEMPT
+            using (new TimerToConsole())
             using (var db = new TryMapperDb())
             {
                 var list = db.FatherSons.Project<FatherSons, LinqCollectionMethodsDto>().ToList();

@@ -63,6 +63,8 @@
   <ItemGroup>
     <Compile Include="Classes\FatherSons.cs" />
     <Compile Include="Classes\FatherSonsCountDto.cs" />
+    <Compile Include="Classes\GenerationFlattenGrandsonSimpleDto.cs" />
+    <Compile Include="Classes\GenerationFlattenLowerCaseDto.cs" />
     <Compile Include="Classes\GenerationFlattenDto.cs" />
     <Compile Include="Classes\Grandson.cs" />
     <Compile Include="Classes\LinqCollectionMethodsDto.cs" />
@@ -72,20 +74,14 @@
     <Compile Include="Classes\SimpleClass.cs" />
     <Compile Include="EfClasses\DatabaseHelpers.cs" />
     <Compile Include="EfClasses\TryMapperDb.cs" />
-    <Compile Include="Flatteners\ExpressMapperExtension.cs" />
-    <Compile Include="Flatteners\FlattenMapper.cs" />
-    <Compile Include="Flatteners\Internal\LinqMethod.cs" />
-    <Compile Include="Flatteners\Internal\ExpressMemberInfo.cs" />
     <Compile Include="Helpers\ExtendAsserts.cs" />
     <Compile Include="Helpers\TestFileHelpers.cs" />
     <Compile Include="Helpers\TimerToConsole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitTests\Test05CompareMappersLinqMethods.cs" />
     <Compile Include="UnitTests\Test02CompareMappersLinq.cs" />
-    <Compile Include="UnitTests\Test15LinqMethod.cs" />
     <Compile Include="UnitTests\Test50FlattenExpressMapperEntityFramework.cs" />
     <Compile Include="UnitTests\Test10CompareMappersEntityFramework.cs" />
-    <Compile Include="UnitTests\Test20FlattenMapper.cs" />
     <Compile Include="UnitTests\Test01CompareMappersDirect.cs" />
     <Compile Include="UnitTests\Test30FlattenExpressMapperDirect.cs" />
   </ItemGroup>

@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper.QueryableExtensions;
+using ExpressMapper;
 using ExpressMapper.Extensions;
 using NUnit.Framework;
 using TryMappers.Classes;
@@ -37,12 +38,12 @@ namespace TryMappers.UnitTests
         {
             //SETUP
             AutoMapper.MapperConfiguration config;
-            using (new TimerToConsole($"automapper-setup: SimpleClass - {count} time"))
+            using (new TimerToConsole())
             {
                 config = new AutoMapper.MapperConfiguration(cfg => cfg.CreateMap<SimpleClass, SimpleClassDto>());
             }
             var queryData = SimpleClass.CreateMany(numTimes).AsQueryable();
-            using (new TimerToConsole($"automapper-map: SimpleClass - for {numTimes}."))
+            using (new TimerToConsole())
             {
                 //ATTEMPT
                 var list = queryData.ProjectTo<SimpleClassDto>(config).ToList();        //force IQueryable to be executed
@@ -60,12 +61,12 @@ namespace TryMappers.UnitTests
         {
             //SETUP
             AutoMapper.MapperConfiguration config;
-            using (new TimerToConsole($"automapper-setup: GenerationFlattenDto - {count} time"))
+            using (new TimerToConsole())
             {
                 config = new AutoMapper.MapperConfiguration(cfg => cfg.CreateMap<Father, GenerationFlattenDto>());
             }
             var queryData = Father.CreateMany(numTimes).AsQueryable();
-            using (new TimerToConsole($"automapper-map: GenerationFlattenDto - for {numTimes}."))
+            using (new TimerToConsole())
             {
                 //ATTEMPT
                 var list = queryData.ProjectTo<GenerationFlattenDto>(config).ToList();        //force IQueryable to be executed
@@ -84,7 +85,7 @@ namespace TryMappers.UnitTests
             var single = Father.CreateOne();
             single.Son.Grandson = null;
             var queryData = new List<Father> {single}.AsQueryable();
-            using (new TimerToConsole($"automapper-map: GenerationFlattenDto - with null."))
+            using (new TimerToConsole())
             {
                 //ATTEMPT
                 var ex = Assert.Throws<NullReferenceException>(() =>  queryData.ProjectTo<GenerationFlattenDto>(config).ToList());
@@ -105,14 +106,14 @@ namespace TryMappers.UnitTests
         {
             //SETUP
             ExpressMapper.Mapper.Reset();
-            using (new TimerToConsole("ExpressMapper-setup: SimpleClass"))
+            using (new TimerToConsole())
             {
                 ExpressMapper.Mapper.Register<SimpleClass, SimpleClassDto>();
-                ExpressMapper.Mapper.Compile();
+                ExpressMapper.Mapper.Compile(CompilationTypes.Source);
             }
 
             var queryData = SimpleClass.CreateMany(numTimes).AsQueryable();
-            using (new TimerToConsole($"ExpressMapper-map: SimpleClass - for {numTimes}"))
+            using (new TimerToConsole())
             {
                 //ATTEMPT
                 var list = queryData.Project<SimpleClass, SimpleClassDto>().ToList(); //force IQueryable to be executed
@@ -130,18 +131,18 @@ namespace TryMappers.UnitTests
         {
             //SETUP
             ExpressMapper.Mapper.Reset();
-            using (new TimerToConsole("ExpressMapper-setup: GenerationFlattenDto"))
+            using (new TimerToConsole())
             {
                 ExpressMapper.Mapper.Register<Father, GenerationFlattenDto>()
                     .Member(dest => dest.SonMyInt, src => src.Son.MyInt)
                     .Member(dest => dest.SonGrandsonMyInt, src => src.Son.Grandson.MyInt)
                     .Member(dest => dest.SonMyString, src => src.Son.MyString)
                     .Member(dest => dest.SonGrandsonMyString, src => src.Son.Grandson.MyString);
-                ExpressMapper.Mapper.Compile();
+                ExpressMapper.Mapper.Compile(CompilationTypes.Source);
             }
 
             var queryData = Father.CreateMany(numTimes).AsQueryable();
-            using (new TimerToConsole($"ExpressMapper-map: GenerationFlattenDto - for {numTimes}"))
+            using (new TimerToConsole())
             {
                 //ATTEMPT
                 var list = queryData.Project<Father, GenerationFlattenDto>().ToList();
@@ -158,19 +159,19 @@ namespace TryMappers.UnitTests
         public void Test13ExpressMapperGenerationFlattenDtoWithNullOk()
         {
             ExpressMapper.Mapper.Reset();
-            using (new TimerToConsole("ExpressMapper-setup: GenerationFlattenDto"))
+            using (new TimerToConsole())
             {
                 ExpressMapper.Mapper.Register<Father, GenerationFlattenDto>()
                     .Member(dest => dest.SonMyInt, src => src.Son.MyInt)
                     .Member(dest => dest.SonGrandsonMyInt, src => src.Son.Grandson.MyInt)
                     .Member(dest => dest.SonMyString, src => src.Son.MyString)
                     .Member(dest => dest.SonGrandsonMyString, src => src.Son.Grandson.MyString);
-                ExpressMapper.Mapper.Compile();
+                ExpressMapper.Mapper.Compile(CompilationTypes.Source);
             }
             var single = Father.CreateOne();
             single.Son.Grandson = null;
             var queryData = new List<Father> { single }.AsQueryable();
-            using (new TimerToConsole($"ExpressMapper-map: GenerationFlattenDto - with null."))
+            using (new TimerToConsole())
             {
                 //ATTEMPT
                 var ex = Assert.Throws<NullReferenceException>(() => queryData.Project<Father, GenerationFlattenDto>().ToList());
