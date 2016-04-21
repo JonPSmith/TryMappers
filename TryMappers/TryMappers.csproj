@@ -42,9 +42,9 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ExpressMapper, Version=1.8.0.0, Culture=neutral, PublicKeyToken=ac363faa09311ba0, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\ExpressMapper\ExpressMapper NET40\bin\Debug\ExpressMapper.dll</HintPath>
+    <Reference Include="ExpressMapper, Version=1.8.1.0, Culture=neutral, PublicKeyToken=ac363faa09311ba0, processorArchitecture=MSIL">
+      <HintPath>..\packages\Expressmapper.1.8.1\lib\net451\ExpressMapper.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
@@ -75,6 +75,7 @@
     <Compile Include="EfClasses\DatabaseHelpers.cs" />
     <Compile Include="EfClasses\TryMapperDb.cs" />
     <Compile Include="Helpers\ExtendAsserts.cs" />
+    <Compile Include="Helpers\LogDatabaseAccesses.cs" />
     <Compile Include="Helpers\TestFileHelpers.cs" />
     <Compile Include="Helpers\TimerToConsole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -87,7 +88,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
