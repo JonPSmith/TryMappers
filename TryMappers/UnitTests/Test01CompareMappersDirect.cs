@@ -20,6 +20,7 @@ namespace TryMappers.UnitTests
 {
     public class Test01CompareMappersDirect
     {
+
         [TestCase(1, 1)]
         [TestCase(1, 2)]
         [TestCase(100, 3)]
@@ -231,6 +232,49 @@ namespace TryMappers.UnitTests
                     dto.SonGrandsonMyString.ShouldEqual("Grandson");
                 }
             }
+        }
+
+        [Test]
+        public void Test50AutoMapperMyStringDtoOk()
+        {
+            //SETUP
+            AutoMapper.MapperConfiguration config;
+            using (new TimerToConsole())
+            {
+                config = new AutoMapper.MapperConfiguration(cfg => cfg.CreateMap<MyStringDto, SimpleClass>());
+            }
+            
+            //ATTEMPT
+            var mapper = config.CreateMapper();
+            var simpleClass = SimpleClass.CreateOne();
+            var dto = new MyStringDto {MyString = "Only this"};
+            mapper.Map(dto, simpleClass);
+
+            //VERIFY
+            simpleClass.MyInt.ShouldEqual(1);
+            simpleClass.MyString.ShouldEqual("Only this");
+            simpleClass.MyDateTime.Year.ShouldEqual(2016);
+        }
+
+        [Test]
+        public void Test50ExpressMapperMyStringDtoOk()
+        {
+            //SETUP
+            ExpressMapper.Mapper.Reset();
+            using (new TimerToConsole())
+            {
+                ExpressMapper.Mapper.Register<MyStringDto, SimpleClass>();
+                ExpressMapper.Mapper.Compile();
+            }
+            //ATTEMPT
+            var simpleClass = SimpleClass.CreateOne();
+            var dto = new MyStringDto { MyString = "Only this" };
+            ExpressMapper.Mapper.Map(dto, simpleClass);
+
+            //VERIFY   
+            simpleClass.MyInt.ShouldEqual(1);
+            simpleClass.MyString.ShouldEqual("Only this");
+            simpleClass.MyDateTime.Year.ShouldEqual(2016);
         }
     }
 }

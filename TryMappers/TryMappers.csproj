@@ -68,6 +68,7 @@
     <Compile Include="Classes\GenerationFlattenDto.cs" />
     <Compile Include="Classes\Grandson.cs" />
     <Compile Include="Classes\LinqCollectionMethodsDto.cs" />
+    <Compile Include="Classes\MyStringDto.cs" />
     <Compile Include="Classes\Son.cs" />
     <Compile Include="Classes\Father.cs" />
     <Compile Include="Classes\SimpleClassDto.cs" />
